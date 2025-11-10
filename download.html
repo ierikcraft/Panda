@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descargando ErikBrowser</title>
+    <!-- Cargamos Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Usamos la fuente Inter, como en tu otra web */
+        body { 
+            font-family: 'Inter', sans-serif; 
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen text-center p-4">
+
+    <!-- 
+      Este script se ejecuta inmediatamente al cargar la página.
+      Detecta el sistema operativo y cambia la URL del navegador.
+    -->
+    <script>
+        (function() {
+            // --- Define tus URLs ---
+            const urlWindows = "https://www.dropbox.com/scl/fi/0p4vhn906w8gqpr9egcbu/ErikBrowser-Installer.zip?rlkey=s4au7a3b3wkchjrodwzj6qint&st=jlw366vu&dl=1";
+            const urlAndroid = "https://eriksearch.vercel.app/";
+            const urlIOS = "https://eriksearch.vercel.app/"; // Para iPhone y iPad
+            const urlMac = "https://erikserver.vercel.app";
+            const urlFallback = "https://eriksearch.vercel.app/"; // Para Linux u otros
+
+            // --- Detección del Sistema Operativo ---
+            const ua = navigator.userAgent;
+            const platform = navigator.platform;
+            
+            let redirectUrl = urlFallback; // Empezamos con el enlace por defecto
+
+            // 1. iOS (iPhone, iPad, iPod)
+            // (Lo comprobamos ANTES que Mac, porque los iPads nuevos pueden fingir ser un Mac)
+            if (/iPad|iPhone|iPod/.test(ua) || (platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+                redirectUrl = urlIOS;
+            } 
+            // 2. Android
+            else if (/Android/.test(ua)) {
+                redirectUrl = urlAndroid;
+            }
+            // 3. Mac
+            else if (/Mac/.test(platform) || /Mac/.test(ua)) {
+                redirectUrl = urlMac;
+            }
+            // 4. Windows
+            else if (/Win/.test(platform) || /Win/.test(ua)) {
+                redirectUrl = urlWindows;
+            }
+            
+            // --- Redirección ---
+            // Cambiamos la ubicación de la ventana a la URL decidida
+            window.location.href = redirectUrl;
+        })();
+    </script>
+
+    <!-- 
+      Este es el mensaje que el usuario verá brevemente 
+      mientras el script de arriba se ejecuta y redirige.
+    -->
+    <div class="p-8">
+        <!-- Icono de carga (animación de giro) -->
+        <svg class="w-16 h-16 text-blue-500 mx-auto animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <h1 class="text-3xl font-bold mt-6">Redirigiendo...</h1>
+        <p class="text-lg text-gray-300 mt-2">
+            Buscando la descarga correcta para tu dispositivo.
+        </p>
+    </div>
+
+</body>
+</html>
