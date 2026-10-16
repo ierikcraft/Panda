@@ -17,7 +17,23 @@
             --accent-color: #4CAF50;
         }
 
-        html { color-scheme: dark; }
+        /* Por defecto en modo claro ahora */
+        html { color-scheme: light; width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; }
+
+        body { 
+            width: 100%; 
+            height: 100%; 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden;
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            background-image: var(--bg-gradient); 
+            transition: background 0.3s ease, color 0.3s ease; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
 
         html.light-theme, body.light-theme {
             --bg-color: #eef2f5;
@@ -30,10 +46,14 @@
             color-scheme: light; 
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); height: 100vh; display: flex; flex-direction: column; overflow: hidden; background-image: var(--bg-gradient); transition: background 0.3s ease, color 0.3s ease; margin: 0; }
+        /* Estilos oscuros forzados cuando está en dark mode */
+        html.dark-theme, body.dark-theme {
+            color-scheme: dark;
+        }
 
-        .browser-header { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); position: relative; z-index: 100; display: flex; flex-direction: column; -webkit-app-region: drag; }
+        * { box-sizing: border-box; }
+
+        .browser-header { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); position: relative; z-index: 100; display: flex; flex-direction: column; -webkit-app-region: drag; flex-shrink: 0; }
         .tabs-bar { display: flex; align-items: flex-end; height: 38px; padding: 0 10px; gap: 5px; background: rgba(0, 0, 0, 0.15); overflow-x: auto; padding-top: 10px; }
         body.light-theme .tabs-bar { background: rgba(0, 0, 0, 0.04); }
         .tabs-list { display: flex; gap: 5px; -webkit-app-region: no-drag; }
@@ -48,7 +68,7 @@
         .new-tab-btn { background: none; border: none; color: var(--text-color); font-size: 16px; cursor: pointer; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-bottom: 3px; opacity: 0.7; transition: all 0.2s; -webkit-app-region: no-drag; }
         .new-tab-btn:hover { background: var(--hover-bg); opacity: 1; }
 
-        .navbar { display: flex; align-items: center; padding: 8px 15px; height: 50px; -webkit-app-region: no-drag; }
+        .navbar { display: flex; align-items: center; padding: 8px 15px; height: 50px; -webkit-app-region: no-drag; flex-shrink: 0; }
         .nav-buttons { display: flex; gap: 2px; }
         .icon-btn { background: none; border: none; color: var(--text-color); opacity: 0.7; font-size: 20px; cursor: pointer; width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
         .icon-btn:hover { background-color: var(--hover-bg); opacity: 1; }
@@ -71,34 +91,38 @@
         .extensions { display: flex; align-items: center; gap: 4px; }
         .ai-btn img { height: 24px; border-radius: 6px; }
 
-        .bookmarks-bar { display: none; align-items: center; background: rgba(0, 0, 0, 0.05); padding: 4px 15px; border-bottom: 1px solid var(--glass-border); gap: 15px; overflow-x: auto; white-space: nowrap; height: 32px; z-index: 90; -webkit-app-region: no-drag; }
+        .bookmarks-bar { display: none; align-items: center; background: rgba(0, 0, 0, 0.05); padding: 4px 15px; border-bottom: 1px solid var(--glass-border); gap: 15px; overflow-x: auto; white-space: nowrap; height: 32px; z-index: 90; -webkit-app-region: no-drag; flex-shrink: 0; }
         .bookmark-item { color: var(--text-color); opacity: 0.8; text-decoration: none; font-size: 12px; display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 4px; cursor: pointer; }
         .bookmark-item i { font-size: 14px; opacity: 0.6; }
         .bookmark-item:hover { background: var(--hover-bg); opacity: 1; }
 
-        .main-content { display: flex; flex-grow: 1; position: relative; z-index: 10; }
-        .web-views-container { flex-grow: 1; height: 100%; background-color: #ffffff; position: relative; }
+        /* Ajuste crucial para que llene el espacio vertical restante hasta el fondo */
+        .main-content { display: flex; flex: 1; width: 100%; position: relative; z-index: 10; overflow: hidden; }
+        .web-views-container { flex: 1; height: 100%; background-color: #ffffff; position: relative; overflow: hidden; }
         
         .web-view { width: 100%; height: 100%; position: absolute; top: 0; left: 0; display: none; background-color: transparent; }
         .web-view.active { display: flex; flex-direction: column; }
         .web-view.loading { opacity: 0.5; }
-        webview { width: 100%; height: 100%; border: none; display: flex; background-color: #fff; }
+        webview { width: 100%; height: 100%; border: none; display: flex; background-color: #fff; flex: 1; }
 
-        .ai-sidebar { width: 350px; background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-left: 1px solid var(--glass-border); display: none; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.2); }
-        .sidebar-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid var(--glass-border); }
+        /* Ajuste de altura para ErikAI */
+        .ai-sidebar { width: 350px; height: 100%; background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-left: 1px solid var(--glass-border); display: none; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.2); }
+        .sidebar-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid var(--glass-border); flex-shrink: 0; }
         .sidebar-brand { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
         .sidebar-brand img { height: 20px; border-radius: 4px; }
 
         .settings-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 999; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
-        .settings-modal { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; width: 650px; max-width: 90%; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.3); overflow: hidden; }
-        .settings-header { padding: 15px 20px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 16px; }
-        .settings-body { display: flex; height: 400px; }
-        .settings-sidebar { width: 220px; background: rgba(0,0,0,0.1); border-right: 1px solid var(--glass-border); padding: 10px 0; }
+        .settings-modal { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; width: 650px; max-width: 90%; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.3); overflow: hidden; }
+        .settings-header { padding: 15px 20px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 16px; flex-shrink: 0; }
+        
+        /* Ajuste para que el panel de ajustes ocupe bien el espacio */
+        .settings-body { display: flex; flex: 1; min-height: 400px; overflow: hidden; }
+        .settings-sidebar { width: 220px; height: 100%; background: rgba(0,0,0,0.1); border-right: 1px solid var(--glass-border); padding: 10px 0; overflow-y: auto; }
         .settings-tab-btn { padding: 12px 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 12px; color: var(--text-color); opacity: 0.6; transition: all 0.2s; border-left: 3px solid transparent; }
         .settings-tab-btn i { font-size: 18px; }
         .settings-tab-btn:hover { opacity: 1; background: var(--hover-bg); }
         .settings-tab-btn.active { opacity: 1; background: var(--hover-bg); border-left-color: var(--accent-color); color: var(--accent-color); }
-        .settings-content-area { padding: 25px; flex-grow: 1; overflow-y: auto; }
+        .settings-content-area { padding: 25px; flex-grow: 1; overflow-y: auto; height: 100%; }
         .settings-panel { display: none; }
         .settings-panel.active { display: block; }
         .settings-panel h3 { font-size: 16px; margin-bottom: 25px; font-weight: 500; }
@@ -129,7 +153,7 @@
         .update-btn-action:hover { background-color: var(--hover-bg); border-color: var(--accent-color); }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
     <div class="browser-header">
         <div class="tabs-bar">
@@ -166,6 +190,7 @@
 
     <div class="main-content">
         <div class="web-views-container" id="web-views-container"></div>
+        
         <div class="ai-sidebar" id="ai-sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-brand">
@@ -174,7 +199,7 @@
                 </div>
                 <button id="close-ai" class="icon-btn" style="width: 28px; height: 28px;"><i class="ph ph-x"></i></button>
             </div>
-            <webview id="ai-frame" src="https://ai.erikhub.com/chat.html" allowpopups style="width: 100%; height: 100%; display: flex; border: none;"></webview>
+            <webview id="ai-frame" src="https://ai.erikhub.com/chat.html" allowpopups style="width: 100%; height: 100%; display: flex; border: none; flex: 1;"></webview>
         </div>
     </div>
 
@@ -214,14 +239,13 @@
                     <div id="panel-appearance" class="settings-panel">
                         <h3>Tema del Navegador</h3>
                         <div class="theme-selector">
-                            <button class="theme-btn active" id="theme-dark"><i class="ph ph-moon"></i> Oscuro</button>
-                            <button class="theme-btn" id="theme-light"><i class="ph ph-sun"></i> Blanco</button>
+                            <button class="theme-btn" id="theme-dark"><i class="ph ph-moon"></i> Oscuro</button>
+                            <button class="theme-btn active" id="theme-light"><i class="ph ph-sun"></i> Blanco</button>
                         </div>
                         <h3 style="margin-top: 30px;">Color Extra (Acento)</h3>
                         <div class="setting-item"><span>Elige el color principal de la interfaz</span><div class="color-picker-container"><input type="color" id="set-accent-color" value="#4CAF50"></div></div>
                     </div>
 
-                    <!-- Panel de Actualizaciones Nuevo -->
                     <div id="panel-update" class="settings-panel">
                         <h3>Actualizaciones de Panda</h3>
                         <div class="setting-item">
@@ -239,14 +263,14 @@
     </div>
 
     <script>
-        // VARIABLE GLOBAL DE VERSIÓN
         const PANDA_VERSION = "1.0.0";
 
+        // Ajuste en el localStorage: ahora el tema por defecto es 'light'
         let settings = JSON.parse(localStorage.getItem('panda_settings')) || { 
             bookmarksEnabled: true, 
             showBookmarksBar: false, 
             shortcutAdded: false, 
-            theme: 'dark', 
+            theme: 'light', 
             accentColor: '#4CAF50',
             searchEngine: 'eriksearch'
         };
@@ -267,7 +291,6 @@
 
         const erikSecureDomains = ['ai.erikhub.com', 'erikhub.com', 'eriksearch.vercel.app'];
 
-        // LÓGICA DE ACTUALIZACIONES (OTA)
         document.getElementById('current-version-display').textContent = 'v' + PANDA_VERSION;
 
         document.getElementById('btn-check-update').addEventListener('click', async () => {
@@ -275,22 +298,18 @@
             statusText.textContent = "Buscando en panda.erikhub.com...";
 
             try {
-                // Añadimos timestamp para evitar que el navegador guarde la versión en caché
                 const response = await fetch(`https://panda.erikhub.com/update/version.json?t=${Date.now()}`);
                 const data = await response.json();
 
                 if (data.version !== PANDA_VERSION) {
                     statusText.innerHTML = `<span style="color: var(--accent-color);">¡Nueva versión ${data.version} encontrada! Descargando...</span>`;
 
-                    // Descargar el nuevo código HTML
                     const htmlResponse = await fetch(data.fileUrl + `?t=${Date.now()}`);
                     const newHtml = await htmlResponse.text();
 
-                    // Detectar si estamos en Electron para poder escribir en disco
                     if (typeof require !== 'undefined') {
                         const fs = require('fs');
                         const path = require('path');
-                        // __dirname nos da la ruta de la carpeta donde se está ejecutando el navegador
                         const indexPath = path.join(__dirname, 'index.html');
                         
                         fs.writeFileSync(indexPath, newHtml, 'utf8');
@@ -301,7 +320,7 @@
                             window.location.reload();
                         }, 2000);
                     } else {
-                        statusText.innerHTML = `<span style="color: #ffaa00;">Estás en modo web. El archivo HTML se instalaría automáticamente si estuvieras en la app de escritorio (Electron).</span>`;
+                        statusText.innerHTML = `<span style="color: #ffaa00;">Estás en modo web. El archivo se instalaría en Electron.</span>`;
                     }
                 } else {
                     statusText.textContent = "Ya tienes la última versión instalada.";
@@ -311,7 +330,6 @@
                 console.error(error);
             }
         });
-
 
         function checkSecureLock(url) {
             try {
@@ -383,7 +401,7 @@
             const viewUI = document.createElement('div');
             viewUI.className = 'web-view';
             viewUI.id = 'view-' + id;
-            viewUI.innerHTML = `<webview src="${url}" allowpopups style="width: 100%; height: 100%; display: flex; border: none; background-color: #fff;"></webview>`;
+            viewUI.innerHTML = `<webview src="${url}" allowpopups style="width: 100%; height: 100%; border: none; flex: 1; display: flex; background-color: #fff;"></webview>`;
             viewsContainer.appendChild(viewUI);
 
             const webviewElement = viewUI.querySelector('webview');
@@ -541,11 +559,15 @@
             if (settings.theme === 'light') {
                 htmlElement.classList.add('light-theme');
                 bodyElement.classList.add('light-theme');
+                htmlElement.classList.remove('dark-theme');
+                bodyElement.classList.remove('dark-theme');
                 document.getElementById('theme-light').classList.add('active');
                 document.getElementById('theme-dark').classList.remove('active');
             } else {
                 htmlElement.classList.remove('light-theme');
                 bodyElement.classList.remove('light-theme');
+                htmlElement.classList.add('dark-theme');
+                bodyElement.classList.add('dark-theme');
                 document.getElementById('theme-dark').classList.add('active');
                 document.getElementById('theme-light').classList.remove('active');
             }
