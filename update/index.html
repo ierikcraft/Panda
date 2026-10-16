@@ -17,7 +17,6 @@
             --accent-color: #4CAF50;
         }
 
-        /* Por defecto en modo claro ahora */
         html { color-scheme: light; width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; }
 
         body { 
@@ -46,7 +45,6 @@
             color-scheme: light; 
         }
 
-        /* Estilos oscuros forzados cuando está en dark mode */
         html.dark-theme, body.dark-theme {
             color-scheme: dark;
         }
@@ -68,8 +66,8 @@
         .new-tab-btn { background: none; border: none; color: var(--text-color); font-size: 16px; cursor: pointer; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-bottom: 3px; opacity: 0.7; transition: all 0.2s; -webkit-app-region: no-drag; }
         .new-tab-btn:hover { background: var(--hover-bg); opacity: 1; }
 
-        .navbar { display: flex; align-items: center; padding: 8px 15px; height: 50px; -webkit-app-region: no-drag; flex-shrink: 0; }
-        .nav-buttons { display: flex; gap: 2px; }
+        .navbar { display: flex; align-items: center; padding: 8px 15px; height: 50px; -webkit-app-region: no-drag; flex-shrink: 0; justify-content: space-between; }
+        .nav-buttons { display: flex; gap: 2px; flex-shrink: 0; }
         .icon-btn { background: none; border: none; color: var(--text-color); opacity: 0.7; font-size: 20px; cursor: pointer; width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
         .icon-btn:hover { background-color: var(--hover-bg); opacity: 1; }
         .icon-btn:disabled { opacity: 0.3; cursor: not-allowed; }
@@ -77,8 +75,9 @@
         .btn-spin i { animation: spin 0.5s ease; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        .address-bar-container { flex-grow: 1; display: flex; justify-content: center; margin: 0 15px; max-width: 800px; }
-        .address-bar-wrapper { width: 100%; display: flex; align-items: center; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; transition: all 0.3s ease; padding: 0 10px; }
+        /* AHORA SÍ: Centrado perfecto y ocupando todo el ancho necesario para empujar los botones a la derecha */
+        .address-bar-container { flex-grow: 1; display: flex; justify-content: center; margin: 0 15px; }
+        .address-bar-wrapper { width: 100%; max-width: 800px; display: flex; align-items: center; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; transition: all 0.3s ease; padding: 0 10px; }
         .address-bar-wrapper:focus-within { border-color: var(--accent-color); background: var(--glass-bg); box-shadow: 0 0 0 1px var(--accent-color); }
         
         .lock-icon { color: #888; font-size: 16px; margin-right: 8px; transition: color 0.3s ease; }
@@ -88,7 +87,9 @@
         #btn-star { background: none; border: none; font-size: 18px; cursor: pointer; color: #888; transition: all 0.2s; display: none; padding: 4px; }
         #btn-star:hover { color: var(--accent-color); }
         #btn-star.saved { color: var(--accent-color); transform: scale(1.1); }
-        .extensions { display: flex; align-items: center; gap: 4px; }
+        
+        /* Ajuste clave: margin-left auto para empujarlos hasta el borde derecho de la ventana */
+        .extensions { display: flex; align-items: center; gap: 4px; margin-left: auto; flex-shrink: 0; }
         .ai-btn img { height: 24px; border-radius: 6px; }
 
         .bookmarks-bar { display: none; align-items: center; background: rgba(0, 0, 0, 0.05); padding: 4px 15px; border-bottom: 1px solid var(--glass-border); gap: 15px; overflow-x: auto; white-space: nowrap; height: 32px; z-index: 90; -webkit-app-region: no-drag; flex-shrink: 0; }
@@ -96,7 +97,6 @@
         .bookmark-item i { font-size: 14px; opacity: 0.6; }
         .bookmark-item:hover { background: var(--hover-bg); opacity: 1; }
 
-        /* Ajuste crucial para que llene el espacio vertical restante hasta el fondo */
         .main-content { display: flex; flex: 1; width: 100%; position: relative; z-index: 10; overflow: hidden; }
         .web-views-container { flex: 1; height: 100%; background-color: #ffffff; position: relative; overflow: hidden; }
         
@@ -105,7 +105,6 @@
         .web-view.loading { opacity: 0.5; }
         webview { width: 100%; height: 100%; border: none; display: flex; background-color: #fff; flex: 1; }
 
-        /* Ajuste de altura para ErikAI */
         .ai-sidebar { width: 350px; height: 100%; background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-left: 1px solid var(--glass-border); display: none; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.2); }
         .sidebar-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid var(--glass-border); flex-shrink: 0; }
         .sidebar-brand { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
@@ -115,7 +114,6 @@
         .settings-modal { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; width: 650px; max-width: 90%; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.3); overflow: hidden; }
         .settings-header { padding: 15px 20px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 16px; flex-shrink: 0; }
         
-        /* Ajuste para que el panel de ajustes ocupe bien el espacio */
         .settings-body { display: flex; flex: 1; min-height: 400px; overflow: hidden; }
         .settings-sidebar { width: 220px; height: 100%; background: rgba(0,0,0,0.1); border-right: 1px solid var(--glass-border); padding: 10px 0; overflow-y: auto; }
         .settings-tab-btn { padding: 12px 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 12px; color: var(--text-color); opacity: 0.6; transition: all 0.2s; border-left: 3px solid transparent; }
@@ -263,9 +261,8 @@
     </div>
 
     <script>
-        const PANDA_VERSION = "1.0.0";
+        const PANDA_VERSION = "1.0.1";
 
-        // Ajuste en el localStorage: ahora el tema por defecto es 'light'
         let settings = JSON.parse(localStorage.getItem('panda_settings')) || { 
             bookmarksEnabled: true, 
             showBookmarksBar: false, 
