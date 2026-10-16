@@ -75,9 +75,8 @@
         .btn-spin i { animation: spin 0.5s ease; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* AHORA SÍ: Centrado perfecto y ocupando todo el ancho necesario para empujar los botones a la derecha */
         .address-bar-container { flex-grow: 1; display: flex; justify-content: center; margin: 0 15px; }
-        .address-bar-wrapper { width: 100%; max-width: 800px; display: flex; align-items: center; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; transition: all 0.3s ease; padding: 0 10px; }
+        .address-bar-wrapper { width: 100%; display: flex; align-items: center; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; transition: all 0.3s ease; padding: 0 10px; }
         .address-bar-wrapper:focus-within { border-color: var(--accent-color); background: var(--glass-bg); box-shadow: 0 0 0 1px var(--accent-color); }
         
         .lock-icon { color: #888; font-size: 16px; margin-right: 8px; transition: color 0.3s ease; }
@@ -88,7 +87,6 @@
         #btn-star:hover { color: var(--accent-color); }
         #btn-star.saved { color: var(--accent-color); transform: scale(1.1); }
         
-        /* Ajuste clave: margin-left auto para empujarlos hasta el borde derecho de la ventana */
         .extensions { display: flex; align-items: center; gap: 4px; margin-left: auto; flex-shrink: 0; }
         .ai-btn img { height: 24px; border-radius: 6px; }
 
@@ -261,7 +259,7 @@
     </div>
 
     <script>
-        const PANDA_VERSION = "1.0.1";
+        const PANDA_VERSION = "1.0.2";
 
         let settings = JSON.parse(localStorage.getItem('panda_settings')) || { 
             bookmarksEnabled: true, 
@@ -646,7 +644,6 @@
         btnStar.addEventListener('click', () => {
             const tab = tabs.find(t => t.id === activeTabId);
             const currentUrl = tab.url;
-            if(currentUrl.includes('eriksearch.vercel.app') || currentUrl.includes('google.com')) return;
 
             const existingIndex = bookmarks.findIndex(bm => bm.url === currentUrl);
             if (existingIndex >= 0) {
