@@ -20,33 +20,15 @@
         html { color-scheme: light; width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; }
 
         body { 
-            width: 100%; 
-            height: 100%; 
-            margin: 0; 
-            padding: 0; 
-            display: flex; 
-            flex-direction: column; 
-            overflow: hidden;
-            background-color: var(--bg-color); 
-            color: var(--text-color); 
-            background-image: var(--bg-gradient); 
-            transition: background 0.3s ease, color 0.3s ease; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            width: 100%; height: 100%; margin: 0; padding: 0; display: flex; flex-direction: column; overflow: hidden;
+            background-color: var(--bg-color); color: var(--text-color); background-image: var(--bg-gradient); 
+            transition: background 0.3s ease, color 0.3s ease; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         html.light-theme, body.light-theme {
-            --bg-color: #eef2f5;
-            --text-color: #1a1a1a;
-            --glass-bg: rgba(255, 255, 255, 0.75);
-            --glass-border: rgba(0, 0, 0, 0.1);
-            --hover-bg: rgba(0, 0, 0, 0.05);
-            --input-bg: rgba(255, 255, 255, 0.5);
-            --bg-gradient: radial-gradient(circle at top right, #ffffff, #eef2f5);
-            color-scheme: light; 
-        }
-
-        html.dark-theme, body.dark-theme {
-            color-scheme: dark;
+            --bg-color: #eef2f5; --text-color: #1a1a1a; --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(0, 0, 0, 0.1); --hover-bg: rgba(0, 0, 0, 0.05); --input-bg: rgba(255, 255, 255, 0.5);
+            --bg-gradient: radial-gradient(circle at top right, #ffffff, #eef2f5); color-scheme: light; 
         }
 
         * { box-sizing: border-box; }
@@ -163,13 +145,7 @@
 
         .apple-id-banner {
             background: linear-gradient(180deg, #4da2ff 0%, #007AFF 100%);
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            color: white;
-            margin-bottom: 15px;
+            border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 15px; color: white; margin-bottom: 15px;
         }
         .apple-id-banner img { width: 64px; height: 64px; border-radius: 50%; border: 2px solid white; object-fit: cover; background: #e5e5ea; }
         .apple-id-banner .default-pic { width: 64px; height: 64px; border-radius: 50%; border: 2px solid white; background: #e5e5ea; color: #8e8e93; display: flex; align-items: center; justify-content: center; font-size: 30px; }
@@ -213,7 +189,6 @@
                 <button id="btn-back" class="icon-btn" title="Atrás" disabled><i class="ph ph-caret-left"></i></button>
                 <button id="btn-forward" class="icon-btn" title="Adelante" disabled><i class="ph ph-caret-right"></i></button>
                 <button id="btn-reload" class="icon-btn" title="Recargar"><i class="ph ph-arrows-clockwise"></i></button>
-                <!-- NUEVO: Botón ErikDrop directo en la barra de navegación -->
                 <button id="btn-erikdrop-bar" class="icon-btn" title="ErikDrop (Enviar pestaña)"><i class="ph ph-share-network"></i></button>
             </div>
 
@@ -312,7 +287,6 @@
                             </div>
                         </div>
 
-                        <!-- SUB-VISTA: INFORMACIÓN PERSONAL -->
                         <div id="sub-view-personal" class="sub-settings-view">
                             <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
                             <h3>Información Personal</h3>
@@ -327,7 +301,6 @@
                             <button class="auth-btn-action" style="margin-top: 15px;" onclick="saveAccountChanges()">Guardar cambios</button>
                         </div>
 
-                        <!-- SUB-VISTA: ERIKID REAL CON FIREBASE -->
                         <div id="sub-view-erikid" class="sub-settings-view">
                             <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
                             <h3>ErikID</h3>
@@ -338,7 +311,6 @@
                             </div>
                         </div>
 
-                        <!-- SUB-VISTA: SEGURIDAD -->
                         <div id="sub-view-security" class="sub-settings-view">
                             <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
                             <h3>Seguridad de la Cuenta</h3>
@@ -349,7 +321,6 @@
                             <p style="font-size: 12px; color: #888;">Protege tus accesos con códigos temporales enviados a tu correo.</p>
                         </div>
 
-                        <!-- SUB-VISTA: DISPOSITIVOS -->
                         <div id="sub-view-devices" class="sub-settings-view">
                             <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
                             <h3>Dispositivos Vinculados</h3>
@@ -361,7 +332,6 @@
                             </div>
                         </div>
 
-                        <!-- SUB-VISTA: SINCRONIZACIÓN -->
                         <div id="sub-view-sync" class="sub-settings-view">
                             <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
                             <h3>Sincronización en la Nube</h3>
@@ -373,7 +343,6 @@
                             <button class="auth-btn-action" style="margin-top: 20px;" onclick="forceSyncNow()">Sincronizar ahora</button>
                         </div>
 
-                        <!-- SUB-VISTA: PESTAÑAS DE DISPOSITIVOS -->
                         <div id="sub-view-multidevice" class="sub-settings-view">
                             <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
                             <h3>Pestañas de otros dispositivos</h3>
@@ -383,7 +352,6 @@
                             </div>
                         </div>
 
-                        <!-- SUB-VISTA: ERIKDROP -->
                         <div id="sub-view-erikdrop" class="sub-settings-view">
                             <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
                             <h3>ErikDrop</h3>
@@ -456,7 +424,7 @@
                 <button id="close-downloads" class="icon-btn" style="width: 28px; height: 28px;"><i class="ph ph-x"></i></button>
             </div>
             <div class="settings-body" style="flex-direction: column; padding: 20px; overflow-y: auto;">
-                <p style="font-size: 13px; color: #888; text-align: center; margin-bottom: 20px;">Tus archivos descargados recientemente aparecerán यहाँ.</p>
+                <p style="font-size: 13px; color: #888; text-align: center; margin-bottom: 20px;">Tus archivos descargados recientemente aparecerán aquí.</p>
                 <div class="downloads-list" id="downloads-list">
                     <div style="text-align: center; padding: 40px 0; opacity: 0.5;">
                         <i class="ph ph-folder-open" style="font-size: 40px; margin-bottom: 10px;"></i>
@@ -549,7 +517,6 @@
             alert("¡Sincronización completada con éxito!");
         };
 
-        // Lógica real de ErikID con Firebase
         window.initErikIdRealState = async () => {
             if (!window.pandaAccount || !window.pandaAccount.firestoreId) return;
             const toggle = document.getElementById('acc-erikid-toggle');
@@ -559,7 +526,7 @@
                 const userDoc = await getDoc(doc(db, "users", window.pandaAccount.firestoreId));
                 if (userDoc.exists()) {
                     const data = userDoc.data();
-                    toggle.checked = data.erikIdEnabled !== false; // por defecto true
+                    toggle.checked = data.erikIdEnabled !== false;
                 }
             } catch(e) { console.error("Error cargando estado ErikID:", e); }
 
@@ -668,7 +635,7 @@
     </script>
 
     <script>
-        const PANDA_VERSION = "1.0.9";
+        const PANDA_VERSION = "1.0.10";
 
         let settings = JSON.parse(localStorage.getItem('panda_settings')) || { 
             bookmarksEnabled: true, showBookmarksBar: false, shortcutAdded: false, 
@@ -693,57 +660,70 @@
 
         document.getElementById('current-version-display').textContent = 'v' + PANDA_VERSION;
 
+        // SISTEMA OTA BLINDADO CONTRA CORS Y BLOQUEOS DE NODE
         document.getElementById('btn-check-update').addEventListener('click', () => {
             const statusText = document.getElementById('update-status');
-            statusText.textContent = "Buscando en panda.erikhub.com...";
+            statusText.textContent = "Conectando con panda.erikhub.com...";
 
-            try {
-                const https = require('https');
-                
-                https.get(`https://panda.erikhub.com/update/version.json?t=${Date.now()}`, (resp) => {
-                    let data = '';
-                    resp.on('data', (chunk) => { data += chunk; });
-                    
-                    resp.on('end', () => {
-                        try {
-                            const json = JSON.parse(data);
-                            if (json.version !== PANDA_VERSION) {
-                                statusText.innerHTML = `<span style="color: var(--accent-color);">¡Nueva versión ${json.version} encontrada! Descargando...</span>`;
+            // Método híbrido fetch estándar (por si tu servidor ya tiene CORS habilitado o pasa por proxy)
+            fetch(`https://panda.erikhub.com/update/version.json?t=${Date.now()}`)
+                .then(res => res.json())
+                .then(json => {
+                    if (json.version !== PANDA_VERSION) {
+                        statusText.innerHTML = `<span style="color: var(--accent-color);">¡Versión ${json.version} detectada! Descargando paquete...</span>`;
+                        
+                        return fetch(json.fileUrl + `?t=${Date.now()}`)
+                            .then(r => r.text())
+                            .then(htmlData => {
+                                const fs = require('fs');
+                                const path = require('path');
+                                const indexPath = path.join(__dirname, 'index.html');
                                 
-                                https.get(json.fileUrl + `?t=${Date.now()}`, (htmlResp) => {
-                                    let htmlData = '';
-                                    htmlResp.on('data', (chunk) => { htmlData += chunk; });
-                                    htmlResp.on('end', () => {
-                                        const fs = require('fs');
-                                        const path = require('path');
-                                        const indexPath = path.join(__dirname, 'index.html');
-                                        
-                                        fs.writeFileSync(indexPath, htmlData, 'utf8');
-                                        
-                                        statusText.innerHTML = `<span style="color: var(--accent-color);">¡Actualizado con éxito! Reiniciando...</span>`;
-                                        setTimeout(() => {
-                                            const { remote } = require('electron');
-                                            if (remote) remote.app.relaunch();
-                                            window.location.reload();
-                                        }, 1500);
+                                fs.writeFileSync(indexPath, htmlData, 'utf8');
+                                statusText.innerHTML = `<span style="color: var(--accent-color);">¡Actualización completada! Reiniciando Panda...</span>`;
+                                
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1500);
+                            });
+                    } else {
+                        statusText.textContent = "Ya tienes la última versión instalada.";
+                    }
+                })
+                .catch(err => {
+                    // Fallback directo con Node.js si fetch del navegador da CORS
+                    statusText.textContent = "Usando canal seguro Node.js...";
+                    try {
+                        const https = require('https');
+                        https.get(`https://panda.erikhub.com/update/version.json?t=${Date.now()}`, (resp) => {
+                            let data = '';
+                            resp.on('data', chunk => data += chunk);
+                            resp.on('end', () => {
+                                const json = JSON.parse(data);
+                                if (json.version !== PANDA_VERSION) {
+                                    statusText.innerHTML = `<span style="color: var(--accent-color);">¡Versión ${json.version} encontrada por Node! Instalando...</span>`;
+                                    https.get(json.fileUrl + `?t=${Date.now()}`, (hResp) => {
+                                        let hData = '';
+                                        hResp.on('data', chunk => hData += chunk);
+                                        hResp.on('end', () => {
+                                            const fs = require('fs');
+                                            const path = require('path');
+                                            fs.writeFileSync(path.join(__dirname, 'index.html'), hData, 'utf8');
+                                            statusText.innerHTML = `<span style="color: var(--accent-color);">¡Actualizado! Reiniciando...</span>`;
+                                            setTimeout(() => window.location.reload(), 1500);
+                                        });
                                     });
-                                }).on("error", (err) => {
-                                    statusText.innerHTML = `<span style="color: #ff4444;">Fallo en descarga: ${err.message}</span>`;
-                                });
-
-                            } else {
-                                statusText.textContent = "Ya tienes la última versión instalada.";
-                            }
-                        } catch (e) {
-                            statusText.innerHTML = `<span style="color: #ff4444;">Error leyendo la versión del servidor.</span>`;
-                        }
-                    });
-                }).on("error", (err) => {
-                    statusText.innerHTML = `<span style="color: #ff4444;">Error de red: ${err.message}</span>`;
+                                } else {
+                                    statusText.textContent = "Ya tienes la última versión instalada.";
+                                }
+                            });
+                        }).on('error', (e2) => {
+                            statusText.innerHTML = `<span style="color: #ff4444;">Error definitivo: ${e2.message}</span>`;
+                        });
+                    } catch(e3) {
+                        statusText.innerHTML = `<span style="color: #ff4444;">Error crítico: ${e3.message}</span>`;
+                    }
                 });
-            } catch (error) {
-                statusText.innerHTML = `<span style="color: #ff4444;">Estás en versión Web. OTA funciona en Electron.</span>`;
-            }
         });
 
         window.switchAccountSubView = (viewId) => {
@@ -871,7 +851,7 @@
             switchAccountSubView('acc-main-view');
         });
 
-        // NUEVO: Botón ErikDrop en la barra superior (abre directamente el apartado ErikDrop en ajustes)
+        // Botón ErikDrop superior
         document.getElementById('btn-erikdrop-bar').addEventListener('click', () => {
             if (!window.pandaAccount) {
                 alert("Inicia sesión con ErikAccount para usar ErikDrop.");
