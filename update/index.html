@@ -56,7 +56,6 @@
         body.light-theme .tabs-bar { background: rgba(0, 0, 0, 0.04); }
         .tabs-list { display: flex; gap: 5px; -webkit-app-region: no-drag; }
 
-        /* Ajuste para cursor de arrastre */
         .tab { background: var(--glass-bg); border: 1px solid var(--glass-border); border-bottom: none; border-radius: 8px 8px 0 0; padding: 6px 15px; font-size: 13px; display: flex; align-items: center; gap: 8px; color: var(--text-color); min-width: 140px; max-width: 200px; height: 32px; cursor: grab; opacity: 0.6; transition: all 0.2s, opacity 0s; position: relative; }
         .tab:active { cursor: grabbing; }
         .tab.active { opacity: 1; height: 34px; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
@@ -111,7 +110,6 @@
         .sidebar-brand { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
         .sidebar-brand img { height: 20px; border-radius: 4px; }
 
-        /* Modal y Overlays (Ajustes y Descargas) */
         .settings-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 999; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
         .settings-modal { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; width: 650px; max-width: 90%; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.3); overflow: hidden; }
         .settings-header { padding: 15px 20px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 16px; flex-shrink: 0; }
@@ -152,7 +150,6 @@
         .update-btn-action { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px; border-radius: 8px; border: none; background-color: var(--input-bg); color: var(--text-color); cursor: pointer; font-size: 15px; transition: all 0.2s; border: 1px solid var(--glass-border); margin-top: 15px; }
         .update-btn-action:hover { background-color: var(--hover-bg); border-color: var(--accent-color); }
         
-        /* Lista de Descargas */
         .downloads-list { display: flex; flex-direction: column; gap: 10px; }
         .download-item { padding: 12px; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
         .download-item p { margin: 0; font-size: 14px; font-weight: 500; }
@@ -210,7 +207,6 @@
         </div>
     </div>
 
-    <!-- Modal de Ajustes -->
     <div class="settings-overlay" id="settings-overlay">
         <div class="settings-modal">
             <div class="settings-header">
@@ -270,7 +266,6 @@
         </div>
     </div>
 
-    <!-- Modal de Descargas -->
     <div class="settings-overlay" id="downloads-overlay">
         <div class="settings-modal" style="width: 400px; height: 500px; max-height: 80vh;">
             <div class="settings-header">
@@ -282,7 +277,6 @@
             <div class="settings-body" style="flex-direction: column; padding: 20px; overflow-y: auto;">
                 <p style="font-size: 13px; color: #888; text-align: center; margin-bottom: 20px;">Tus archivos descargados recientemente aparecerán aquí.</p>
                 <div class="downloads-list" id="downloads-list">
-                    <!-- Aquí se inyectarían las descargas del backend -->
                     <div style="text-align: center; padding: 40px 0; opacity: 0.5;">
                         <i class="ph ph-folder-open" style="font-size: 40px; margin-bottom: 10px;"></i>
                         <p>No hay descargas activas</p>
@@ -293,15 +287,11 @@
     </div>
 
     <script>
-        const PANDA_VERSION = "1.0.3";
+        const PANDA_VERSION = "1.0.4";
 
         let settings = JSON.parse(localStorage.getItem('panda_settings')) || { 
-            bookmarksEnabled: true, 
-            showBookmarksBar: false, 
-            shortcutAdded: false, 
-            theme: 'light', 
-            accentColor: '#4CAF50',
-            searchEngine: 'eriksearch'
+            bookmarksEnabled: true, showBookmarksBar: false, shortcutAdded: false, 
+            theme: 'light', accentColor: '#4CAF50', searchEngine: 'eriksearch'
         };
         
         let bookmarks = JSON.parse(localStorage.getItem('panda_bookmarks')) || [{ name: "ErikHub", url: "https://erikhub.com" }];
@@ -322,41 +312,53 @@
 
         document.getElementById('current-version-display').textContent = 'v' + PANDA_VERSION;
 
-        document.getElementById('btn-check-update').addEventListener('click', async () => {
+        // NUEVO SISTEMA DE ACTUALIZACIÓN CON NODE.JS (Anti-CORS)
+        document.getElementById('btn-check-update').addEventListener('click', () => {
             const statusText = document.getElementById('update-status');
             statusText.textContent = "Buscando en panda.erikhub.com...";
 
             try {
-                const response = await fetch(`https://panda.erikhub.com/update/version.json?t=${Date.now()}`);
-                const data = await response.json();
+                // Usamos Node.js directamente para saltarnos las reglas web de CORS
+                const https = require('https');
+                
+                https.get(`https://panda.erikhub.com/update/version.json?t=${Date.now()}`, (resp) => {
+                    let data = '';
+                    resp.on('data', (chunk) => { data += chunk; });
+                    
+                    resp.on('end', () => {
+                        try {
+                            const json = JSON.parse(data);
+                            if (json.version !== PANDA_VERSION) {
+                                statusText.innerHTML = `<span style="color: var(--accent-color);">¡Nueva versión ${json.version} encontrada! Instalando...</span>`;
+                                
+                                https.get(json.fileUrl + `?t=${Date.now()}`, (htmlResp) => {
+                                    let htmlData = '';
+                                    htmlResp.on('data', (chunk) => { htmlData += chunk; });
+                                    htmlResp.on('end', () => {
+                                        const fs = require('fs');
+                                        const path = require('path');
+                                        const indexPath = path.join(__dirname, 'index.html');
+                                        fs.writeFileSync(indexPath, htmlData, 'utf8');
+                                        
+                                        statusText.innerHTML = `<span style="color: var(--accent-color);">¡Panda actualizado! Reiniciando...</span>`;
+                                        setTimeout(() => window.location.reload(), 2000);
+                                    });
+                                }).on("error", (err) => {
+                                    statusText.innerHTML = `<span style="color: #ff4444;">Fallo en descarga: ${err.message}</span>`;
+                                });
 
-                if (data.version !== PANDA_VERSION) {
-                    statusText.innerHTML = `<span style="color: var(--accent-color);">¡Nueva versión ${data.version} encontrada! Descargando...</span>`;
-
-                    const htmlResponse = await fetch(data.fileUrl + `?t=${Date.now()}`);
-                    const newHtml = await htmlResponse.text();
-
-                    if (typeof require !== 'undefined') {
-                        const fs = require('fs');
-                        const path = require('path');
-                        const indexPath = path.join(__dirname, 'index.html');
-                        
-                        fs.writeFileSync(indexPath, newHtml, 'utf8');
-
-                        statusText.innerHTML = `<span style="color: var(--accent-color);">¡Actualizado con éxito! Reiniciando Panda...</span>`;
-                        
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 2000);
-                    } else {
-                        statusText.innerHTML = `<span style="color: #ffaa00;">Estás en modo web. El archivo se instalaría en Electron.</span>`;
-                    }
-                } else {
-                    statusText.textContent = "Ya tienes la última versión instalada.";
-                }
+                            } else {
+                                statusText.textContent = "Ya tienes la última versión instalada.";
+                            }
+                        } catch (e) {
+                            statusText.innerHTML = `<span style="color: #ff4444;">Error leyendo la versión del servidor.</span>`;
+                        }
+                    });
+                }).on("error", (err) => {
+                    statusText.innerHTML = `<span style="color: #ff4444;">Error de red: ${err.message}</span>`;
+                });
             } catch (error) {
-                statusText.innerHTML = `<span style="color: #ff4444;">Error al conectar con el servidor. Revisa si version.json está subido.</span>`;
-                console.error(error);
+                statusText.innerHTML = `<span style="color: #ff4444;">Error del sistema: ${error.message}</span>`;
             }
         });
 
@@ -423,7 +425,6 @@
                 <i class="ph ph-x tab-close"></i>
             `;
             
-            // Drag and Drop (Para reordenar pestañas)
             tabUI.draggable = true;
             tabUI.addEventListener('dragstart', (e) => {
                 e.dataTransfer.setData('text/plain', id);
@@ -432,9 +433,7 @@
             tabUI.addEventListener('dragend', () => {
                 tabUI.style.opacity = tabUI.classList.contains('active') ? '1' : '0.6';
             });
-            tabUI.addEventListener('dragover', (e) => {
-                e.preventDefault(); // Permitir el drop
-            });
+            tabUI.addEventListener('dragover', (e) => { e.preventDefault(); });
             tabUI.addEventListener('drop', (e) => {
                 e.preventDefault();
                 const draggedId = e.dataTransfer.getData('text/plain');
@@ -442,13 +441,11 @@
                     const draggedEl = document.getElementById('ui-' + draggedId);
                     const targetEl = document.getElementById('ui-' + id);
                     
-                    // Reordenar en el Array
                     const draggedIndex = tabs.findIndex(t => t.id === draggedId);
                     const targetIndex = tabs.findIndex(t => t.id === id);
                     const [draggedTab] = tabs.splice(draggedIndex, 1);
                     tabs.splice(targetIndex, 0, draggedTab);
 
-                    // Reordenar en el DOM (Interfaz)
                     if (draggedIndex < targetIndex) {
                         targetEl.parentNode.insertBefore(draggedEl, targetEl.nextSibling);
                     } else {
@@ -620,17 +617,13 @@
 
         function applySettings() {
             if (settings.theme === 'light') {
-                htmlElement.classList.add('light-theme');
-                bodyElement.classList.add('light-theme');
-                htmlElement.classList.remove('dark-theme');
-                bodyElement.classList.remove('dark-theme');
+                htmlElement.classList.add('light-theme'); bodyElement.classList.add('light-theme');
+                htmlElement.classList.remove('dark-theme'); bodyElement.classList.remove('dark-theme');
                 document.getElementById('theme-light').classList.add('active');
                 document.getElementById('theme-dark').classList.remove('active');
             } else {
-                htmlElement.classList.remove('light-theme');
-                bodyElement.classList.remove('light-theme');
-                htmlElement.classList.add('dark-theme');
-                bodyElement.classList.add('dark-theme');
+                htmlElement.classList.remove('light-theme'); bodyElement.classList.remove('light-theme');
+                htmlElement.classList.add('dark-theme'); bodyElement.classList.add('dark-theme');
                 document.getElementById('theme-dark').classList.add('active');
                 document.getElementById('theme-light').classList.remove('active');
             }
@@ -682,7 +675,6 @@
         document.getElementById('close-settings').addEventListener('click', () => settingsOverlay.style.display = 'none');
         settingsOverlay.addEventListener('click', (e) => { if(e.target === settingsOverlay) settingsOverlay.style.display = 'none'; });
 
-        // Gestión del Overlay de Descargas
         const downloadsOverlay = document.getElementById('downloads-overlay');
         document.getElementById('btn-downloads').addEventListener('click', () => downloadsOverlay.style.display = 'flex');
         document.getElementById('close-downloads').addEventListener('click', () => downloadsOverlay.style.display = 'none');
@@ -696,10 +688,8 @@
                 a.className = 'bookmark-item';
                 a.innerHTML = `<img src="${getFavicon(bm.url)}" style="width:14px; height:14px; border-radius:3px; object-fit:contain;"> ${bm.name}`;
                 
-                // Click izquierdo normal para abrir
                 a.onclick = () => loadUrlInActiveTab(bm.url);
                 
-                // Clic derecho (Control derecho) para eliminar
                 a.addEventListener('contextmenu', (e) => {
                     e.preventDefault();
                     if(confirm(`¿Quieres eliminar el marcador "${bm.name}"?`)) {
@@ -708,10 +698,8 @@
                         renderBookmarks();
                     }
                 });
-
                 bar.appendChild(a);
             });
-            
             if(activeTabId) {
                 const tab = tabs.find(t => t.id === activeTabId);
                 if(tab) checkIfCurrentIsBookmarked(tab.url);
@@ -729,24 +717,20 @@
             }
         }
 
-        // Fix de Guardado Rápido de Marcadores
         btnStar.addEventListener('click', () => {
             const tab = tabs.find(t => t.id === activeTabId);
             const currentUrl = tab.url;
 
             const existingIndex = bookmarks.findIndex(bm => bm.url === currentUrl);
-            
-            // Si ya existe, lo eliminamos. Si no, lo creamos.
             if (existingIndex >= 0) {
                 bookmarks.splice(existingIndex, 1);
             } else {
                 const name = prompt("Nombre del marcador:", getTabTitle(currentUrl));
-                if (name !== null) { // Solo guarda si el usuario no canceló el cuadro de diálogo
+                if (name !== null) {
                     bookmarks.push({ name, url: currentUrl });
                 }
             }
             
-            // Guardamos, forzamos actualización visual al momento y renderizamos
             localStorage.setItem('panda_bookmarks', JSON.stringify(bookmarks));
             checkIfCurrentIsBookmarked(currentUrl); 
             renderBookmarks();
