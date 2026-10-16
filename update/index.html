@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panda by Erik</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root {
+            --bg-color: #0f0f0f;
+            --text-color: #f1f1f1;
+            --glass-bg: rgba(30, 30, 30, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --hover-bg: rgba(255, 255, 255, 0.1);
+            --input-bg: rgba(0, 0, 0, 0.4);
+            --bg-gradient: radial-gradient(circle at top right, #252525, #0f0f0f);
+            --accent-color: #4CAF50;
+        }
+
+        html { color-scheme: dark; }
+
+        html.light-theme, body.light-theme {
+            --bg-color: #eef2f5;
+            --text-color: #1a1a1a;
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --hover-bg: rgba(0, 0, 0, 0.05);
+            --input-bg: rgba(255, 255, 255, 0.5);
+            --bg-gradient: radial-gradient(circle at top right, #ffffff, #eef2f5);
+            color-scheme: light; 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); height: 100vh; display: flex; flex-direction: column; overflow: hidden; background-image: var(--bg-gradient); transition: background 0.3s ease, color 0.3s ease; margin: 0; }
+
+        .browser-header { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); position: relative; z-index: 100; display: flex; flex-direction: column; -webkit-app-region: drag; }
+        .tabs-bar { display: flex; align-items: flex-end; height: 38px; padding: 0 10px; gap: 5px; background: rgba(0, 0, 0, 0.15); overflow-x: auto; padding-top: 10px; }
+        body.light-theme .tabs-bar { background: rgba(0, 0, 0, 0.04); }
+        .tabs-list { display: flex; gap: 5px; -webkit-app-region: no-drag; }
+
+        .tab { background: var(--glass-bg); border: 1px solid var(--glass-border); border-bottom: none; border-radius: 8px 8px 0 0; padding: 6px 15px; font-size: 13px; display: flex; align-items: center; gap: 8px; color: var(--text-color); min-width: 140px; max-width: 200px; height: 32px; cursor: pointer; opacity: 0.6; transition: all 0.2s; position: relative; }
+        .tab.active { opacity: 1; height: 34px; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
+        .tab.active::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: var(--glass-bg); z-index: 2; }
+        .tab-favicon { width: 14px; height: 14px; border-radius: 3px; object-fit: contain; }
+        .tab-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-grow: 1; }
+        .tab-close { margin-left: auto; font-size: 14px; color: #888; padding: 2px; border-radius: 4px; }
+        .tab-close:hover { background: var(--hover-bg); color: var(--text-color); }
+        .new-tab-btn { background: none; border: none; color: var(--text-color); font-size: 16px; cursor: pointer; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-bottom: 3px; opacity: 0.7; transition: all 0.2s; -webkit-app-region: no-drag; }
+        .new-tab-btn:hover { background: var(--hover-bg); opacity: 1; }
+
+        .navbar { display: flex; align-items: center; padding: 8px 15px; height: 50px; -webkit-app-region: no-drag; }
+        .nav-buttons { display: flex; gap: 2px; }
+        .icon-btn { background: none; border: none; color: var(--text-color); opacity: 0.7; font-size: 20px; cursor: pointer; width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .icon-btn:hover { background-color: var(--hover-bg); opacity: 1; }
+        .icon-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .btn-click { transform: scale(0.85); }
+        .btn-spin i { animation: spin 0.5s ease; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .address-bar-container { flex-grow: 1; display: flex; justify-content: center; margin: 0 15px; max-width: 800px; }
+        .address-bar-wrapper { width: 100%; display: flex; align-items: center; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; transition: all 0.3s ease; padding: 0 10px; }
+        .address-bar-wrapper:focus-within { border-color: var(--accent-color); background: var(--glass-bg); box-shadow: 0 0 0 1px var(--accent-color); }
+        
+        .lock-icon { color: #888; font-size: 16px; margin-right: 8px; transition: color 0.3s ease; }
+        .lock-secure { color: #4CAF50 !important; }
+
+        #url-input { flex-grow: 1; background: transparent; border: none; color: var(--text-color); font-size: 14px; padding: 8px 0; outline: none; }
+        #btn-star { background: none; border: none; font-size: 18px; cursor: pointer; color: #888; transition: all 0.2s; display: none; padding: 4px; }
+        #btn-star:hover { color: var(--accent-color); }
+        #btn-star.saved { color: var(--accent-color); transform: scale(1.1); }
+        .extensions { display: flex; align-items: center; gap: 4px; }
+        .ai-btn img { height: 24px; border-radius: 6px; }
+
+        .bookmarks-bar { display: none; align-items: center; background: rgba(0, 0, 0, 0.05); padding: 4px 15px; border-bottom: 1px solid var(--glass-border); gap: 15px; overflow-x: auto; white-space: nowrap; height: 32px; z-index: 90; -webkit-app-region: no-drag; }
+        .bookmark-item { color: var(--text-color); opacity: 0.8; text-decoration: none; font-size: 12px; display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 4px; cursor: pointer; }
+        .bookmark-item i { font-size: 14px; opacity: 0.6; }
+        .bookmark-item:hover { background: var(--hover-bg); opacity: 1; }
+
+        .main-content { display: flex; flex-grow: 1; position: relative; z-index: 10; }
+        .web-views-container { flex-grow: 1; height: 100%; background-color: #ffffff; position: relative; }
+        
+        .web-view { width: 100%; height: 100%; position: absolute; top: 0; left: 0; display: none; background-color: transparent; }
+        .web-view.active { display: flex; flex-direction: column; }
+        .web-view.loading { opacity: 0.5; }
+        webview { width: 100%; height: 100%; border: none; display: flex; background-color: #fff; }
+
+        .ai-sidebar { width: 350px; background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-left: 1px solid var(--glass-border); display: none; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.2); }
+        .sidebar-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid var(--glass-border); }
+        .sidebar-brand { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
+        .sidebar-brand img { height: 20px; border-radius: 4px; }
+
+        .settings-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 999; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+        .settings-modal { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; width: 650px; max-width: 90%; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.3); overflow: hidden; }
+        .settings-header { padding: 15px 20px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 16px; }
+        .settings-body { display: flex; height: 400px; }
+        .settings-sidebar { width: 220px; background: rgba(0,0,0,0.1); border-right: 1px solid var(--glass-border); padding: 10px 0; }
+        .settings-tab-btn { padding: 12px 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 12px; color: var(--text-color); opacity: 0.6; transition: all 0.2s; border-left: 3px solid transparent; }
+        .settings-tab-btn i { font-size: 18px; }
+        .settings-tab-btn:hover { opacity: 1; background: var(--hover-bg); }
+        .settings-tab-btn.active { opacity: 1; background: var(--hover-bg); border-left-color: var(--accent-color); color: var(--accent-color); }
+        .settings-content-area { padding: 25px; flex-grow: 1; overflow-y: auto; }
+        .settings-panel { display: none; }
+        .settings-panel.active { display: block; }
+        .settings-panel h3 { font-size: 16px; margin-bottom: 25px; font-weight: 500; }
+        .setting-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 14px; }
+        
+        .custom-select { background: var(--input-bg); color: var(--text-color); border: 1px solid var(--glass-border); padding: 8px 12px; border-radius: 8px; font-size: 14px; outline: none; cursor: pointer; width: 150px; }
+        .custom-select:focus { border-color: var(--accent-color); }
+        .custom-select option { background: #222; color: #fff; }
+        html.light-theme .custom-select option { background: #fff; color: #000; }
+
+        .theme-selector { display: flex; gap: 10px; margin-top: 10px; }
+        .theme-btn { flex: 1; padding: 10px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-color); border-radius: 8px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: all 0.2s; }
+        .theme-btn i { font-size: 24px; }
+        .theme-btn:hover { background: var(--hover-bg); }
+        .theme-btn.active { border-color: var(--accent-color); box-shadow: 0 0 0 1px var(--accent-color); }
+        .color-picker-container { display: flex; align-items: center; gap: 15px; }
+        input[type="color"] { -webkit-appearance: none; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; background: none; }
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        input[type="color"]::-webkit-color-swatch { border: none; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.3); }
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(150,150,150,0.3); transition: .3s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: #fff; transition: .3s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        input:checked + .slider { background-color: var(--accent-color); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        .update-btn-action { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px; border-radius: 8px; border: none; background-color: var(--input-bg); color: var(--text-color); cursor: pointer; font-size: 15px; transition: all 0.2s; border: 1px solid var(--glass-border); margin-top: 15px; }
+        .update-btn-action:hover { background-color: var(--hover-bg); border-color: var(--accent-color); }
+    </style>
+</head>
+<body>
+
+    <div class="browser-header">
+        <div class="tabs-bar">
+            <div class="tabs-list" id="tabs-list"></div>
+            <button class="new-tab-btn" id="btn-new-tab"><i class="ph ph-plus"></i></button>
+        </div>
+
+        <header class="navbar">
+            <div class="nav-buttons">
+                <button id="btn-back" class="icon-btn" title="Atrás" disabled><i class="ph ph-caret-left"></i></button>
+                <button id="btn-forward" class="icon-btn" title="Adelante" disabled><i class="ph ph-caret-right"></i></button>
+                <button id="btn-reload" class="icon-btn" title="Recargar"><i class="ph ph-arrows-clockwise"></i></button>
+            </div>
+
+            <div class="address-bar-container">
+                <div class="address-bar-wrapper">
+                    <i id="nav-lock-icon" class="ph ph-lock-key lock-icon"></i>
+                    <input type="text" id="url-input" placeholder="Busca o escribe una URL..." autocomplete="off">
+                    <button id="btn-star" title="Añadir a marcadores"><i class="ph ph-star"></i></button>
+                </div>
+            </div>
+
+            <div class="extensions">
+                <button id="btn-shortcut-bookmarks" class="icon-btn" title="Marcadores" style="display: none;"><i class="ph ph-bookmarks"></i></button>
+                <button id="btn-settings" class="icon-btn" title="Ajustes"><i class="ph ph-gear-six"></i></button>
+                <button id="toggle-ai" class="icon-btn ai-btn" title="Abrir/Cerrar ErikAI">
+                    <img src="https://ai.erikhub.com/source/New%20logo%20in%20ErikAi.gif" alt="ErikAI">
+                </button>
+            </div>
+        </header>
+    </div>
+
+    <div id="bookmarks-bar" class="bookmarks-bar"></div>
+
+    <div class="main-content">
+        <div class="web-views-container" id="web-views-container"></div>
+        <div class="ai-sidebar" id="ai-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <img src="https://ai.erikhub.com/source/New%20logo%20in%20ErikAi.gif" alt="ErikAI">
+                    <span>ErikAI</span>
+                </div>
+                <button id="close-ai" class="icon-btn" style="width: 28px; height: 28px;"><i class="ph ph-x"></i></button>
+            </div>
+            <webview id="ai-frame" src="https://ai.erikhub.com/chat.html" allowpopups style="width: 100%; height: 100%; display: flex; border: none;"></webview>
+        </div>
+    </div>
+
+    <div class="settings-overlay" id="settings-overlay">
+        <div class="settings-modal">
+            <div class="settings-header">
+                Ajustes
+                <button id="close-settings" class="icon-btn" style="width: 28px; height: 28px;"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="settings-body">
+                <div class="settings-sidebar">
+                    <div class="settings-tab-btn active" data-target="panel-search"><i class="ph ph-magnifying-glass"></i> Buscar</div>
+                    <div class="settings-tab-btn" data-target="panel-bookmarks"><i class="ph ph-bookmarks"></i> Marcadores</div>
+                    <div class="settings-tab-btn" data-target="panel-appearance"><i class="ph ph-palette"></i> Apariencia</div>
+                    <div class="settings-tab-btn" data-target="panel-update"><i class="ph ph-arrows-clockwise"></i> Actualizar</div>
+                </div>
+                <div class="settings-content-area">
+                    <div id="panel-search" class="settings-panel active">
+                        <h3>Motor de Búsqueda</h3>
+                        <div class="setting-item">
+                            <span>Buscador predeterminado</span>
+                            <select id="set-search-engine" class="custom-select">
+                                <option value="eriksearch">ErikSearch</option>
+                                <option value="google">Google</option>
+                            </select>
+                        </div>
+                        <p style="font-size: 12px; color: #888; margin-top: 10px;">El buscador se usará cuando escribas algo en la barra que no sea una dirección web.</p>
+                    </div>
+
+                    <div id="panel-bookmarks" class="settings-panel">
+                        <h3>Configuración de Marcadores</h3>
+                        <div class="setting-item"><span>Habilitar marcadores</span><label class="switch"><input type="checkbox" id="set-enable-bookmarks"><span class="slider"></span></label></div>
+                        <div class="setting-item"><span>Mostrar barra de marcadores</span><label class="switch"><input type="checkbox" id="set-show-bar"><span class="slider"></span></label></div>
+                        <div class="setting-item"><span>Añadir acceso directo</span><label class="switch"><input type="checkbox" id="set-shortcut"><span class="slider"></span></label></div>
+                    </div>
+
+                    <div id="panel-appearance" class="settings-panel">
+                        <h3>Tema del Navegador</h3>
+                        <div class="theme-selector">
+                            <button class="theme-btn active" id="theme-dark"><i class="ph ph-moon"></i> Oscuro</button>
+                            <button class="theme-btn" id="theme-light"><i class="ph ph-sun"></i> Blanco</button>
+                        </div>
+                        <h3 style="margin-top: 30px;">Color Extra (Acento)</h3>
+                        <div class="setting-item"><span>Elige el color principal de la interfaz</span><div class="color-picker-container"><input type="color" id="set-accent-color" value="#4CAF50"></div></div>
+                    </div>
+
+                    <!-- Panel de Actualizaciones Nuevo -->
+                    <div id="panel-update" class="settings-panel">
+                        <h3>Actualizaciones de Panda</h3>
+                        <div class="setting-item">
+                            <span>Versión instalada:</span>
+                            <span id="current-version-display" style="color: var(--accent-color); font-weight: bold; font-size: 16px;"></span>
+                        </div>
+                        <button id="btn-check-update" class="update-btn-action">
+                            <i class="ph ph-download-simple"></i> Buscar actualizaciones
+                        </button>
+                        <p id="update-status" style="font-size: 13px; color: #aaa; margin-top: 15px; text-align: center; font-weight: 500;"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // VARIABLE GLOBAL DE VERSIÓN
+        const PANDA_VERSION = "1.0.0";
+
+        let settings = JSON.parse(localStorage.getItem('panda_settings')) || { 
+            bookmarksEnabled: true, 
+            showBookmarksBar: false, 
+            shortcutAdded: false, 
+            theme: 'dark', 
+            accentColor: '#4CAF50',
+            searchEngine: 'eriksearch'
+        };
+        
+        let bookmarks = JSON.parse(localStorage.getItem('panda_bookmarks')) || [{ name: "ErikHub", url: "https://erikhub.com" }];
+
+        let tabs = [];
+        let activeTabId = null;
+        let tabCounter = 0;
+
+        const tabsList = document.getElementById('tabs-list');
+        const viewsContainer = document.getElementById('web-views-container');
+        const urlInput = document.getElementById('url-input');
+        const btnBack = document.getElementById('btn-back');
+        const btnForward = document.getElementById('btn-forward');
+        const btnStar = document.getElementById('btn-star');
+        const navLockIcon = document.getElementById('nav-lock-icon');
+
+        const erikSecureDomains = ['ai.erikhub.com', 'erikhub.com', 'eriksearch.vercel.app'];
+
+        // LÓGICA DE ACTUALIZACIONES (OTA)
+        document.getElementById('current-version-display').textContent = 'v' + PANDA_VERSION;
+
+        document.getElementById('btn-check-update').addEventListener('click', async () => {
+            const statusText = document.getElementById('update-status');
+            statusText.textContent = "Buscando en panda.erikhub.com...";
+
+            try {
+                // Añadimos timestamp para evitar que el navegador guarde la versión en caché
+                const response = await fetch(`https://panda.erikhub.com/update/version.json?t=${Date.now()}`);
+                const data = await response.json();
+
+                if (data.version !== PANDA_VERSION) {
+                    statusText.innerHTML = `<span style="color: var(--accent-color);">¡Nueva versión ${data.version} encontrada! Descargando...</span>`;
+
+                    // Descargar el nuevo código HTML
+                    const htmlResponse = await fetch(data.fileUrl + `?t=${Date.now()}`);
+                    const newHtml = await htmlResponse.text();
+
+                    // Detectar si estamos en Electron para poder escribir en disco
+                    if (typeof require !== 'undefined') {
+                        const fs = require('fs');
+                        const path = require('path');
+                        // __dirname nos da la ruta de la carpeta donde se está ejecutando el navegador
+                        const indexPath = path.join(__dirname, 'index.html');
+                        
+                        fs.writeFileSync(indexPath, newHtml, 'utf8');
+
+                        statusText.innerHTML = `<span style="color: var(--accent-color);">¡Actualizado con éxito! Reiniciando Panda...</span>`;
+                        
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000);
+                    } else {
+                        statusText.innerHTML = `<span style="color: #ffaa00;">Estás en modo web. El archivo HTML se instalaría automáticamente si estuvieras en la app de escritorio (Electron).</span>`;
+                    }
+                } else {
+                    statusText.textContent = "Ya tienes la última versión instalada.";
+                }
+            } catch (error) {
+                statusText.innerHTML = `<span style="color: #ff4444;">Error al conectar con el servidor. Revisa si version.json está subido.</span>`;
+                console.error(error);
+            }
+        });
+
+
+        function checkSecureLock(url) {
+            try {
+                const domain = new URL(url).hostname.replace('www.', '');
+                if (erikSecureDomains.includes(domain)) {
+                    navLockIcon.classList.add('lock-secure');
+                    navLockIcon.classList.remove('ph');
+                    navLockIcon.classList.add('ph-fill');
+                } else {
+                    navLockIcon.classList.remove('lock-secure');
+                    navLockIcon.classList.remove('ph-fill');
+                    navLockIcon.classList.add('ph');
+                }
+            } catch (e) {
+                navLockIcon.classList.remove('lock-secure');
+                navLockIcon.classList.remove('ph-fill');
+                navLockIcon.classList.add('ph');
+            }
+        }
+
+        function getHomeUrl() {
+            if (settings.searchEngine === 'google') return 'https://www.google.com/';
+            return 'https://eriksearch.vercel.app/';
+        }
+
+        function getFavicon(url) {
+            if (url.includes('eriksearch.vercel.app')) return 'https://panda.erikhub.com/source/logo.png';
+            if (url.includes('google.com')) return 'https://www.google.com/favicon.ico';
+            try {
+                const domain = new URL(url).hostname;
+                return `https://s2.googleusercontent.com/s2/favicons?domain=${domain}&sz=32`;
+            } catch (e) {
+                return 'https://panda.erikhub.com/source/logo.png';
+            }
+        }
+
+        function updateAddressBar(url) {
+            if (url.includes('eriksearch.vercel.app') || url.includes('google.com/webhp') || url === 'https://www.google.com/') {
+                urlInput.value = ''; 
+            } else {
+                urlInput.value = url;
+            }
+        }
+
+        function getTabTitle(url) {
+            if (url.includes('eriksearch.vercel.app')) return 'ErikSearch';
+            if (url.includes('google.com')) return 'Google';
+            try { return new URL(url).hostname.replace('www.', ''); } catch { return 'Nueva Pestaña'; }
+        }
+
+        function createNewTab(url = getHomeUrl(), isBackground = false) {
+            const id = 'tab_' + tabCounter++;
+            const tabData = { id: id, history: [url], currentIndex: 0, url: url };
+            tabs.push(tabData);
+
+            const tabUI = document.createElement('div');
+            tabUI.className = 'tab';
+            tabUI.id = 'ui-' + id;
+            tabUI.innerHTML = `
+                <img src="${getFavicon(url)}" class="tab-favicon">
+                <span class="tab-title">Cargando...</span>
+                <i class="ph ph-x tab-close"></i>
+            `;
+            
+            tabUI.addEventListener('click', (e) => { if(!e.target.classList.contains('tab-close')) switchTab(id); });
+            tabUI.querySelector('.tab-close').addEventListener('click', (e) => { e.stopPropagation(); closeTab(id); });
+            tabsList.appendChild(tabUI);
+
+            const viewUI = document.createElement('div');
+            viewUI.className = 'web-view';
+            viewUI.id = 'view-' + id;
+            viewUI.innerHTML = `<webview src="${url}" allowpopups style="width: 100%; height: 100%; display: flex; border: none; background-color: #fff;"></webview>`;
+            viewsContainer.appendChild(viewUI);
+
+            const webviewElement = viewUI.querySelector('webview');
+            if(webviewElement) {
+                webviewElement.addEventListener('did-navigate', (e) => {
+                    const currentTab = tabs.find(t => t.id === id);
+                    if(currentTab) {
+                        currentTab.url = e.url;
+                        if(currentTab.history[currentTab.currentIndex] !== e.url) {
+                            currentTab.history = currentTab.history.slice(0, currentTab.currentIndex + 1);
+                            currentTab.history.push(e.url);
+                            currentTab.currentIndex++;
+                        }
+                        if(activeTabId === id) updateTabUIAfterNavigation(currentTab);
+                    }
+                });
+            }
+
+            setTimeout(() => { tabUI.querySelector('.tab-title').textContent = getTabTitle(url); }, 500);
+            if (!isBackground) switchTab(id);
+        }
+
+        function switchTab(id) {
+            if (activeTabId) {
+                const oldUi = document.getElementById('ui-' + activeTabId);
+                const oldView = document.getElementById('view-' + activeTabId);
+                if(oldUi) oldUi.classList.remove('active');
+                if(oldView) oldView.classList.remove('active');
+            }
+
+            activeTabId = id;
+            const currentTab = tabs.find(t => t.id === id);
+
+            document.getElementById('ui-' + id).classList.add('active');
+            document.getElementById('view-' + id).classList.add('active');
+
+            updateAddressBar(currentTab.url);
+            updateNavButtons(currentTab);
+            checkIfCurrentIsBookmarked(currentTab.url);
+            checkSecureLock(currentTab.url);
+        }
+
+        function closeTab(id) {
+            if (tabs.length === 1) return;
+            const index = tabs.findIndex(t => t.id === id);
+            tabs.splice(index, 1);
+            document.getElementById('ui-' + id).remove();
+            document.getElementById('view-' + id).remove();
+
+            if (activeTabId === id) {
+                const newActive = tabs[index - 1] || tabs[0];
+                switchTab(newActive.id);
+            }
+        }
+
+        function loadUrlInActiveTab(url) {
+            const tab = tabs.find(t => t.id === activeTabId);
+            tab.history = tab.history.slice(0, tab.currentIndex + 1);
+            tab.history.push(url);
+            tab.currentIndex++;
+            tab.url = url;
+
+            const view = document.getElementById('view-' + activeTabId);
+            view.classList.add('loading');
+            
+            const webview = view.querySelector('webview');
+            if (webview) webview.src = url;
+
+            setTimeout(() => {
+                view.classList.remove('loading');
+                const ui = document.getElementById('ui-' + activeTabId);
+                ui.querySelector('.tab-title').textContent = getTabTitle(url);
+                ui.querySelector('.tab-favicon').src = getFavicon(url);
+            }, 300);
+
+            updateAddressBar(url);
+            updateNavButtons(tab);
+            checkIfCurrentIsBookmarked(url);
+            checkSecureLock(url);
+        }
+
+        function updateNavButtons(tab) {
+            btnBack.disabled = tab.currentIndex === 0;
+            btnForward.disabled = tab.currentIndex === tab.history.length - 1;
+        }
+
+        document.getElementById('btn-new-tab').addEventListener('click', () => createNewTab());
+
+        urlInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                let query = urlInput.value.trim();
+                if (!query) return;
+                let finalUrl = "";
+                
+                if (query.includes('.') && !query.includes(' ')) {
+                    finalUrl = (!query.startsWith('http://') && !query.startsWith('https://')) ? 'https://' + query : query;
+                } else {
+                    if (settings.searchEngine === 'google') {
+                        finalUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+                    } else {
+                        finalUrl = `https://eriksearch.vercel.app/?q=${encodeURIComponent(query)}`;
+                    }
+                }
+                loadUrlInActiveTab(finalUrl);
+                urlInput.blur();
+            }
+        });
+
+        function updateTabUIAfterNavigation(tab) {
+            const ui = document.getElementById('ui-' + activeTabId);
+            ui.querySelector('.tab-title').textContent = getTabTitle(tab.url);
+            ui.querySelector('.tab-favicon').src = getFavicon(tab.url);
+            updateAddressBar(tab.url);
+            updateNavButtons(tab);
+            checkIfCurrentIsBookmarked(tab.url);
+            checkSecureLock(tab.url);
+        }
+
+        btnBack.addEventListener('click', () => {
+            const tab = tabs.find(t => t.id === activeTabId);
+            if (tab.currentIndex > 0) {
+                btnBack.classList.add('btn-click'); setTimeout(() => btnBack.classList.remove('btn-click'), 150);
+                tab.currentIndex--;
+                tab.url = tab.history[tab.currentIndex];
+                const webview = document.getElementById('view-' + activeTabId).querySelector('webview');
+                if (webview) webview.src = tab.url;
+                updateTabUIAfterNavigation(tab);
+            }
+        });
+
+        btnForward.addEventListener('click', () => {
+            const tab = tabs.find(t => t.id === activeTabId);
+            if (tab.currentIndex < tab.history.length - 1) {
+                btnForward.classList.add('btn-click'); setTimeout(() => btnForward.classList.remove('btn-click'), 150);
+                tab.currentIndex++;
+                tab.url = tab.history[tab.currentIndex];
+                const webview = document.getElementById('view-' + activeTabId).querySelector('webview');
+                if (webview) webview.src = tab.url;
+                updateTabUIAfterNavigation(tab);
+            }
+        });
+
+        document.getElementById('btn-reload').addEventListener('click', () => {
+            const btnReload = document.getElementById('btn-reload');
+            btnReload.classList.add('btn-spin'); setTimeout(() => btnReload.classList.remove('btn-spin'), 500);
+            const webview = document.getElementById('view-' + activeTabId).querySelector('webview');
+            if (webview) webview.reload();
+        });
+
+        const rootStyle = document.documentElement.style;
+        const htmlElement = document.documentElement;
+        const bodyElement = document.body;
+
+        function applySettings() {
+            if (settings.theme === 'light') {
+                htmlElement.classList.add('light-theme');
+                bodyElement.classList.add('light-theme');
+                document.getElementById('theme-light').classList.add('active');
+                document.getElementById('theme-dark').classList.remove('active');
+            } else {
+                htmlElement.classList.remove('light-theme');
+                bodyElement.classList.remove('light-theme');
+                document.getElementById('theme-dark').classList.add('active');
+                document.getElementById('theme-light').classList.remove('active');
+            }
+
+            rootStyle.setProperty('--accent-color', settings.accentColor);
+            document.getElementById('set-accent-color').value = settings.accentColor;
+
+            document.getElementById('set-search-engine').value = settings.searchEngine;
+            document.getElementById('set-enable-bookmarks').checked = settings.bookmarksEnabled;
+            document.getElementById('set-show-bar').checked = settings.showBookmarksBar;
+            document.getElementById('set-shortcut').checked = settings.shortcutAdded;
+
+            const bookmarksBar = document.getElementById('bookmarks-bar');
+            const btnShortcut = document.getElementById('btn-shortcut-bookmarks');
+
+            if (settings.bookmarksEnabled) {
+                btnStar.style.display = 'block';
+                bookmarksBar.style.display = settings.showBookmarksBar ? 'flex' : 'none';
+                btnShortcut.style.display = settings.shortcutAdded ? 'flex' : 'none';
+            } else {
+                btnStar.style.display = 'none';
+                bookmarksBar.style.display = 'none';
+                btnShortcut.style.display = 'none';
+            }
+            renderBookmarks();
+        }
+
+        function saveSettings() { localStorage.setItem('panda_settings', JSON.stringify(settings)); applySettings(); }
+
+        document.querySelectorAll('.settings-tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.settings-tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.target).classList.add('active');
+            });
+        });
+
+        document.getElementById('theme-dark').addEventListener('click', () => { settings.theme = 'dark'; saveSettings(); });
+        document.getElementById('theme-light').addEventListener('click', () => { settings.theme = 'light'; saveSettings(); });
+        document.getElementById('set-accent-color').addEventListener('input', (e) => { settings.accentColor = e.target.value; saveSettings(); });
+        document.getElementById('set-search-engine').addEventListener('change', (e) => { settings.searchEngine = e.target.value; saveSettings(); });
+        document.getElementById('set-enable-bookmarks').addEventListener('change', (e) => { settings.bookmarksEnabled = e.target.checked; saveSettings(); });
+        document.getElementById('set-show-bar').addEventListener('change', (e) => { settings.showBookmarksBar = e.target.checked; saveSettings(); });
+        document.getElementById('set-shortcut').addEventListener('change', (e) => { settings.shortcutAdded = e.target.checked; saveSettings(); });
+
+        const settingsOverlay = document.getElementById('settings-overlay');
+        document.getElementById('btn-settings').addEventListener('click', () => settingsOverlay.style.display = 'flex');
+        document.getElementById('close-settings').addEventListener('click', () => settingsOverlay.style.display = 'none');
+        settingsOverlay.addEventListener('click', (e) => { if(e.target === settingsOverlay) settingsOverlay.style.display = 'none'; });
+
+        function renderBookmarks() {
+            const bar = document.getElementById('bookmarks-bar');
+            bar.innerHTML = '';
+            bookmarks.forEach((bm) => {
+                const a = document.createElement('a');
+                a.className = 'bookmark-item';
+                a.innerHTML = `<img src="${getFavicon(bm.url)}" style="width:14px; height:14px; border-radius:3px; object-fit:contain;"> ${bm.name}`;
+                a.onclick = () => loadUrlInActiveTab(bm.url);
+                bar.appendChild(a);
+            });
+            if(activeTabId) {
+                const tab = tabs.find(t => t.id === activeTabId);
+                if(tab) checkIfCurrentIsBookmarked(tab.url);
+            }
+        }
+
+        function checkIfCurrentIsBookmarked(url) {
+            const isBookmarked = bookmarks.some(bm => bm.url === url);
+            if (isBookmarked) {
+                btnStar.innerHTML = '<i class="ph-fill ph-star"></i>';
+                btnStar.classList.add('saved');
+            } else {
+                btnStar.innerHTML = '<i class="ph ph-star"></i>';
+                btnStar.classList.remove('saved');
+            }
+        }
+
+        btnStar.addEventListener('click', () => {
+            const tab = tabs.find(t => t.id === activeTabId);
+            const currentUrl = tab.url;
+            if(currentUrl.includes('eriksearch.vercel.app') || currentUrl.includes('google.com')) return;
+
+            const existingIndex = bookmarks.findIndex(bm => bm.url === currentUrl);
+            if (existingIndex >= 0) {
+                bookmarks.splice(existingIndex, 1);
+            } else {
+                const name = prompt("Nombre del marcador:", getTabTitle(currentUrl)) || "Marcador";
+                bookmarks.push({ name, url: currentUrl });
+            }
+            localStorage.setItem('panda_bookmarks', JSON.stringify(bookmarks));
+            renderBookmarks();
+        });
+
+        document.getElementById('btn-shortcut-bookmarks').addEventListener('click', () => {
+            const bar = document.getElementById('bookmarks-bar');
+            if(bar.style.display === 'none') {
+                bar.style.display = 'flex';
+                setTimeout(() => { if(!settings.showBookmarksBar) bar.style.display = 'none'; }, 4000);
+            }
+        });
+
+        const aiSidebar = document.getElementById('ai-sidebar');
+        function toggleSidebar() { aiSidebar.style.display = (aiSidebar.style.display === 'flex') ? 'none' : 'flex'; }
+        document.getElementById('toggle-ai').addEventListener('click', toggleSidebar);
+        document.getElementById('close-ai').addEventListener('click', toggleSidebar);
+
+        applySettings();
+        createNewTab();
+    </script>
+</body>
+</html>
