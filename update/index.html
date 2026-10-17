@@ -107,7 +107,7 @@
         .settings-tab-btn i { font-size: 18px; }
         .settings-tab-btn:hover { opacity: 1; background: var(--hover-bg); }
         .settings-tab-btn.active { opacity: 1; background: var(--hover-bg); border-left-color: var(--accent-color); color: var(--accent-color); }
-        .settings-content-area { padding: 25px; flex-grow: 1; overflow-y: auto; height: 100%; }
+        .settings-content-area { padding: 25px; flex-grow: 1; overflow-y: auto; height: 100%; position: relative; }
         .settings-panel { display: none; }
         .settings-panel.active { display: block; }
         .settings-panel h3 { font-size: 16px; margin-bottom: 20px; font-weight: 500; }
@@ -179,6 +179,33 @@
         
         /* MAC Window Buttons Space */
         body.is-mac .tabs-bar { padding-left: 78px; }
+
+        /* Estilos Increíbles Panda 1.0 */
+        .panda-version-title {
+            font-size: 64px;
+            font-weight: 800;
+            margin: 0 0 5px 0;
+            background: linear-gradient(135deg, #ff4b2b 0%, #ff416c 25%, #8a2be2 50%, #4a00e0 75%, #00d4ff 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 4s ease infinite;
+            letter-spacing: -2px;
+            text-align: center;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .panda-version-subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body class="light-theme">
@@ -249,7 +276,7 @@
                     <div class="settings-tab-btn" data-target="panel-search"><i class="ph ph-magnifying-glass"></i> Buscar</div>
                     <div class="settings-tab-btn" data-target="panel-bookmarks"><i class="ph ph-bookmarks"></i> Marcadores</div>
                     <div class="settings-tab-btn" data-target="panel-appearance"><i class="ph ph-palette"></i> Apariencia</div>
-                    <div class="settings-tab-btn" data-target="panel-update"><i class="ph ph-arrows-clockwise"></i> Actualizar</div>
+                    <div class="settings-tab-btn" data-target="panel-update"><i class="ph ph-sparkle"></i> Panda 1.0</div>
                 </div>
                 <div class="settings-content-area">
                     
@@ -404,16 +431,22 @@
                         <div class="setting-item"><span>Elige el color principal de la interfaz</span><div class="color-picker-container"><input type="color" id="set-accent-color" value="#4CAF50"></div></div>
                     </div>
 
+                    <!-- NUEVO PANEL PANDA 1.0 -->
                     <div id="panel-update" class="settings-panel">
-                        <h3>Actualizaciones de Panda</h3>
-                        <div class="setting-item">
-                            <span>Versión instalada:</span>
-                            <span id="current-version-display" style="color: var(--accent-color); font-weight: bold; font-size: 16px;"></span>
+                        <div style="text-align: center; padding: 20px 0;">
+                            <h1 class="panda-version-title">Panda 1.0</h1>
+                            <p class="panda-version-subtitle">El navegador oficial de ErikHub</p>
+                            
+                            <div class="setting-item" style="justify-content: center; background: var(--input-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--glass-border); margin-bottom: 25px; flex-direction: column; gap: 5px;">
+                                <span style="color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Versión Instalada</span>
+                                <span id="current-version-display" style="color: var(--text-primary); font-weight: bold; font-size: 20px;"></span>
+                            </div>
+
+                            <button id="btn-check-update" class="update-btn-action" style="margin: 0 auto; max-width: 250px;">
+                                <i class="ph ph-download-simple"></i> Buscar actualizaciones
+                            </button>
+                            <p id="update-status" style="font-size: 13px; color: #aaa; margin-top: 15px; font-weight: 500;"></p>
                         </div>
-                        <button id="btn-check-update" class="update-btn-action">
-                            <i class="ph ph-download-simple"></i> Buscar actualizaciones
-                        </button>
-                        <p id="update-status" style="font-size: 13px; color: #aaa; margin-top: 15px; text-align: center; font-weight: 500;"></p>
                     </div>
                 </div>
             </div>
@@ -462,7 +495,6 @@
 
         window.dbInstance = db;
 
-        // NUEVO: Verificador de API Keys de Panda (SSL-like)
         window.verifyPandaApiKey = async (apiKey, currentDomain) => {
             try {
                 const dbRef = ref(rtdb, 'panda_api_keys/' + apiKey);
@@ -681,7 +713,7 @@
     </script>
 
     <script>
-        const PANDA_VERSION = "1.0.12";
+        const PANDA_VERSION = "1.0.13";
 
         if (navigator.userAgent.includes('Mac')) {
             document.body.classList.add('is-mac');
@@ -699,7 +731,7 @@
         let tabs = [];
         let activeTabId = null;
         let tabCounter = 0;
-        window.tabs = tabs; // Expose globally for ErikDrop
+        window.tabs = tabs; 
         window.activeTabId = activeTabId;
 
         const tabsList = document.getElementById('tabs-list');
@@ -916,7 +948,6 @@
         const erikSecureDomains = ['ai.erikhub.com', 'erikhub.com', 'eriksearch.vercel.app', 'account.erikhub.com', 'api.panda.erikhub.com'];
 
         async function checkSecureLock(url, tabIdToCheck) {
-            // Si es la pestaña activa, reseteamos el icono mientras carga
             if (activeTabId === tabIdToCheck) {
                 navLockIcon.classList.remove('lock-secure', 'ph-fill');
                 navLockIcon.classList.add('ph');
@@ -927,7 +958,6 @@
                 const domain = urlObj.hostname.replace(/^www\./, '');
                 const origin = urlObj.origin;
 
-                // 1. Dominios por defecto (ErikHub Ecosystem)
                 if (erikSecureDomains.includes(domain)) {
                     if (activeTabId === tabIdToCheck) {
                         navLockIcon.classList.add('lock-secure', 'ph-fill');
@@ -936,7 +966,6 @@
                     return;
                 }
 
-                // 2. Validación de panda.json (SSL nativo de Panda)
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 3500); 
                 
@@ -946,7 +975,6 @@
                 if (response && response.ok) {
                     const data = await response.json().catch(() => null);
                     if (data && data.api) {
-                        // 3. Verificamos la API Key con Firebase Realtime Database
                         if (window.verifyPandaApiKey) {
                             const isValid = await window.verifyPandaApiKey(data.api, domain);
                             if (isValid && activeTabId === tabIdToCheck) {
@@ -957,7 +985,6 @@
                     }
                 }
             } catch (e) {
-                // Ignore, keep it unsecure
             }
         }
 
