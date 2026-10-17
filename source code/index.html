@@ -20,34 +20,18 @@
         html { color-scheme: light; width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; }
 
         body { 
-            width: 100%; 
-            height: 100%; 
-            margin: 0; 
-            padding: 0; 
-            display: flex; 
-            flex-direction: column; 
-            overflow: hidden;
-            background-color: var(--bg-color); 
-            color: var(--text-color); 
-            background-image: var(--bg-gradient); 
-            transition: background 0.3s ease, color 0.3s ease; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            width: 100%; height: 100%; margin: 0; padding: 0; display: flex; flex-direction: column; overflow: hidden;
+            background-color: var(--bg-color); color: var(--text-color); background-image: var(--bg-gradient); 
+            transition: background 0.3s ease, color 0.3s ease; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         html.light-theme, body.light-theme {
-            --bg-color: #eef2f5;
-            --text-color: #1a1a1a;
-            --glass-bg: rgba(255, 255, 255, 0.75);
-            --glass-border: rgba(0, 0, 0, 0.1);
-            --hover-bg: rgba(0, 0, 0, 0.05);
-            --input-bg: rgba(255, 255, 255, 0.5);
-            --bg-gradient: radial-gradient(circle at top right, #ffffff, #eef2f5);
-            color-scheme: light; 
+            --bg-color: #eef2f5; --text-color: #1a1a1a; --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(0, 0, 0, 0.1); --hover-bg: rgba(0, 0, 0, 0.05); --input-bg: rgba(255, 255, 255, 0.5);
+            --bg-gradient: radial-gradient(circle at top right, #ffffff, #eef2f5); color-scheme: light; 
         }
 
-        html.dark-theme, body.dark-theme {
-            color-scheme: dark;
-        }
+        html.dark-theme, body.dark-theme { color-scheme: dark; }
 
         * { box-sizing: border-box; }
 
@@ -56,7 +40,6 @@
         body.light-theme .tabs-bar { background: rgba(0, 0, 0, 0.04); }
         .tabs-list { display: flex; gap: 5px; -webkit-app-region: no-drag; }
 
-        /* Ajuste para cursor de arrastre */
         .tab { background: var(--glass-bg); border: 1px solid var(--glass-border); border-bottom: none; border-radius: 8px 8px 0 0; padding: 6px 15px; font-size: 13px; display: flex; align-items: center; gap: 8px; color: var(--text-color); min-width: 140px; max-width: 200px; height: 32px; cursor: grab; opacity: 0.6; transition: all 0.2s, opacity 0s; position: relative; }
         .tab:active { cursor: grabbing; }
         .tab.active { opacity: 1; height: 34px; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
@@ -93,6 +76,9 @@
         .extensions { display: flex; align-items: center; gap: 4px; margin-left: auto; flex-shrink: 0; }
         .ai-btn img { height: 24px; border-radius: 6px; }
 
+        #nav-profile-pic { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; }
+        .nav-profile-default { font-size: 22px; }
+
         .bookmarks-bar { display: none; align-items: center; background: rgba(0, 0, 0, 0.05); padding: 4px 15px; border-bottom: 1px solid var(--glass-border); gap: 15px; overflow-x: auto; white-space: nowrap; height: 32px; z-index: 90; -webkit-app-region: no-drag; flex-shrink: 0; }
         .bookmark-item { color: var(--text-color); opacity: 0.8; text-decoration: none; font-size: 12px; display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 4px; cursor: pointer; user-select: none; }
         .bookmark-item i { font-size: 14px; opacity: 0.6; }
@@ -111,13 +97,12 @@
         .sidebar-brand { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
         .sidebar-brand img { height: 20px; border-radius: 4px; }
 
-        /* Modal y Overlays (Ajustes y Descargas) */
         .settings-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 999; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
-        .settings-modal { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; width: 650px; max-width: 90%; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.3); overflow: hidden; }
+        .settings-modal { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; width: 750px; max-width: 95%; height: 580px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.3); overflow: hidden; }
         .settings-header { padding: 15px 20px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 16px; flex-shrink: 0; }
         
-        .settings-body { display: flex; flex: 1; min-height: 400px; overflow: hidden; }
-        .settings-sidebar { width: 220px; height: 100%; background: rgba(0,0,0,0.1); border-right: 1px solid var(--glass-border); padding: 10px 0; overflow-y: auto; }
+        .settings-body { display: flex; flex: 1; overflow: hidden; }
+        .settings-sidebar { width: 220px; height: 100%; background: rgba(0,0,0,0.1); border-right: 1px solid var(--glass-border); padding: 10px 0; overflow-y: auto; flex-shrink: 0; }
         .settings-tab-btn { padding: 12px 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 12px; color: var(--text-color); opacity: 0.6; transition: all 0.2s; border-left: 3px solid transparent; }
         .settings-tab-btn i { font-size: 18px; }
         .settings-tab-btn:hover { opacity: 1; background: var(--hover-bg); }
@@ -125,7 +110,7 @@
         .settings-content-area { padding: 25px; flex-grow: 1; overflow-y: auto; height: 100%; }
         .settings-panel { display: none; }
         .settings-panel.active { display: block; }
-        .settings-panel h3 { font-size: 16px; margin-bottom: 25px; font-weight: 500; }
+        .settings-panel h3 { font-size: 16px; margin-bottom: 20px; font-weight: 500; }
         .setting-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 14px; }
         
         .custom-select { background: var(--input-bg); color: var(--text-color); border: 1px solid var(--glass-border); padding: 8px 12px; border-radius: 8px; font-size: 14px; outline: none; cursor: pointer; width: 150px; }
@@ -149,14 +134,48 @@
         input:checked + .slider { background-color: var(--accent-color); }
         input:checked + .slider:before { transform: translateX(20px); }
 
-        .update-btn-action { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px; border-radius: 8px; border: none; background-color: var(--input-bg); color: var(--text-color); cursor: pointer; font-size: 15px; transition: all 0.2s; border: 1px solid var(--glass-border); margin-top: 15px; }
-        .update-btn-action:hover { background-color: var(--hover-bg); border-color: var(--accent-color); }
+        .update-btn-action, .auth-btn-action { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px; border-radius: 8px; border: none; background-color: var(--input-bg); color: var(--text-color); cursor: pointer; font-size: 15px; transition: all 0.2s; border: 1px solid var(--glass-border); margin-top: 15px; font-weight: 500;}
+        .update-btn-action:hover, .auth-btn-action:hover { background-color: var(--hover-bg); border-color: var(--accent-color); }
+        .auth-btn-action { background-color: #000; color: white; border: none; margin-top: 20px; }
+        html.light-theme .auth-btn-action { background-color: #007AFF; color: white; }
+        html.light-theme .auth-btn-action:hover { background-color: #0056b3; }
         
-        /* Lista de Descargas */
         .downloads-list { display: flex; flex-direction: column; gap: 10px; }
         .download-item { padding: 12px; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
         .download-item p { margin: 0; font-size: 14px; font-weight: 500; }
         .download-item span { font-size: 12px; color: #888; }
+
+        .apple-id-banner {
+            background: linear-gradient(180deg, #4da2ff 0%, #007AFF 100%);
+            border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 15px; color: white; margin-bottom: 15px;
+        }
+        .apple-id-banner img { width: 64px; height: 64px; border-radius: 50%; border: 2px solid white; object-fit: cover; background: #e5e5ea; }
+        .apple-id-banner .default-pic { width: 64px; height: 64px; border-radius: 50%; border: 2px solid white; background: #e5e5ea; color: #8e8e93; display: flex; align-items: center; justify-content: center; font-size: 30px; }
+        .apple-id-info { display: flex; flex-direction: column; justify-content: center; }
+        .apple-id-info h2 { margin: 0; font-size: 1.3rem; font-weight: 600; }
+        .apple-id-info p { margin: 2px 0 0 0; font-size: 0.85rem; opacity: 0.9; }
+
+        .ios-acc-list {
+            background: var(--input-bg); border-radius: 12px; overflow: hidden; margin-top: 10px; text-align: left; border: 1px solid var(--glass-border);
+        }
+        .ios-acc-item {
+            padding: 14px 18px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;
+            cursor: pointer; transition: background 0.2s; color: var(--text-color); font-size: 14px; font-weight: 500;
+        }
+        .ios-acc-item:last-child { border-bottom: none; }
+        .ios-acc-item:hover { background: var(--hover-bg); }
+        .ios-acc-item.danger { color: #ff3b30; }
+        .ios-acc-item span { color: #888; font-weight: 600; }
+
+        .sub-settings-view { display: none; }
+        .sub-settings-view.active { display: block; }
+        .back-sub-btn { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: var(--accent-color); font-size: 13px; font-weight: 600; margin-bottom: 15px; background: none; border: none; padding: 0; }
+        .back-sub-btn:hover { text-decoration: underline; }
+        
+        .acc-input-group { margin-bottom: 12px; text-align: left; }
+        .acc-input-group label { display: block; font-size: 12px; color: #888; margin-bottom: 4px; font-weight: 500; }
+        .acc-input-group input { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-color); font-size: 14px; outline: none; }
+        .acc-input-group input:focus { border-color: var(--accent-color); }
     </style>
 </head>
 <body class="light-theme">
@@ -172,6 +191,7 @@
                 <button id="btn-back" class="icon-btn" title="Atrás" disabled><i class="ph ph-caret-left"></i></button>
                 <button id="btn-forward" class="icon-btn" title="Adelante" disabled><i class="ph ph-caret-right"></i></button>
                 <button id="btn-reload" class="icon-btn" title="Recargar"><i class="ph ph-arrows-clockwise"></i></button>
+                <button id="btn-erikdrop-bar" class="icon-btn" title="ErikDrop (Enviar pestaña)"><i class="ph ph-share-network"></i></button>
             </div>
 
             <div class="address-bar-container">
@@ -186,6 +206,10 @@
                 <button id="btn-shortcut-bookmarks" class="icon-btn" title="Marcadores" style="display: none;"><i class="ph ph-bookmarks"></i></button>
                 <button id="btn-downloads" class="icon-btn" title="Descargas"><i class="ph ph-download-simple"></i></button>
                 <button id="btn-settings" class="icon-btn" title="Ajustes"><i class="ph ph-gear-six"></i></button>
+                <button id="btn-profile" class="icon-btn" title="Cuenta">
+                    <i class="ph ph-user-circle nav-profile-default" id="nav-profile-icon"></i>
+                    <img id="nav-profile-pic" src="" style="display: none;">
+                </button>
                 <button id="toggle-ai" class="icon-btn ai-btn" title="Abrir/Cerrar ErikAI">
                     <img src="https://ai.erikhub.com/source/New%20logo%20in%20ErikAi.gif" alt="ErikAI">
                 </button>
@@ -210,7 +234,6 @@
         </div>
     </div>
 
-    <!-- Modal de Ajustes -->
     <div class="settings-overlay" id="settings-overlay">
         <div class="settings-modal">
             <div class="settings-header">
@@ -219,13 +242,138 @@
             </div>
             <div class="settings-body">
                 <div class="settings-sidebar">
-                    <div class="settings-tab-btn active" data-target="panel-search"><i class="ph ph-magnifying-glass"></i> Buscar</div>
+                    <div class="settings-tab-btn active" data-target="panel-accounts"><i class="ph ph-user-circle"></i> Cuentas</div>
+                    <div class="settings-tab-btn" data-target="panel-search"><i class="ph ph-magnifying-glass"></i> Buscar</div>
                     <div class="settings-tab-btn" data-target="panel-bookmarks"><i class="ph ph-bookmarks"></i> Marcadores</div>
                     <div class="settings-tab-btn" data-target="panel-appearance"><i class="ph ph-palette"></i> Apariencia</div>
                     <div class="settings-tab-btn" data-target="panel-update"><i class="ph ph-arrows-clockwise"></i> Actualizar</div>
                 </div>
                 <div class="settings-content-area">
-                    <div id="panel-search" class="settings-panel active">
+                    
+                    <div id="panel-accounts" class="settings-panel active">
+                        
+                        <div id="acc-main-view" class="sub-settings-view active">
+                            <div id="acc-view-logged-out">
+                                <h3>Iniciar Sesión</h3>
+                                <p style="font-size: 14px; color: #888; text-align: center; margin-top: 30px; line-height: 1.5;">
+                                    Sincroniza tu historial, marcadores y ajustes.<br>Conéctate al ecosistema con ErikAccount.
+                                </p>
+                                <button id="btn-login-erik" class="auth-btn-action">
+                                    Iniciar sesión con ErikAccount
+                                </button>
+                            </div>
+
+                            <div id="acc-view-logged-in" style="display: none;">
+                                <div class="apple-id-banner">
+                                    <img id="acc-banner-img" src="" style="display: none;">
+                                    <div id="acc-banner-default" class="default-pic">👤</div>
+                                    <div class="apple-id-info">
+                                        <h2 id="acc-banner-name">Cargando...</h2>
+                                        <p id="acc-banner-email">usuario@mail.com</p>
+                                    </div>
+                                </div>
+
+                                <div class="ios-acc-list">
+                                    <div class="ios-acc-item" onclick="switchAccountSubView('sub-view-personal')">Información personal <span>›</span></div>
+                                    <div class="ios-acc-item" onclick="switchAccountSubView('sub-view-erikid')">ErikID <span>›</span></div>
+                                    <div class="ios-acc-item" onclick="switchAccountSubView('sub-view-security')">Seguridad <span>›</span></div>
+                                    <div class="ios-acc-item" onclick="switchAccountSubView('sub-view-devices')">Dispositivos <span>›</span></div>
+                                    <div class="ios-acc-item" onclick="switchAccountSubView('sub-view-sync')"><i class="ph ph-cloud-arrow-up" style="margin-right:6px;"></i> Sincronización <span>›</span></div>
+                                    <div class="ios-acc-item" onclick="switchAccountSubView('sub-view-multidevice')"><i class="ph ph-devices" style="margin-right:6px;"></i> Pestañas de Dispositivos <span>›</span></div>
+                                    <div class="ios-acc-item" onclick="switchAccountSubView('sub-view-erikdrop')"><i class="ph ph-share-network" style="margin-right:6px;"></i> ErikDrop (Enviar pestaña) <span>›</span></div>
+                                </div>
+
+                                <div class="ios-acc-list" style="margin-top: 15px;">
+                                    <div class="ios-acc-item danger" onclick="logoutPandaAccount()">Cerrar sesión en Panda</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="sub-view-personal" class="sub-settings-view">
+                            <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
+                            <h3>Información Personal</h3>
+                            <div class="acc-input-group">
+                                <label>Nombre completo</label>
+                                <input type="text" id="acc-edit-name">
+                            </div>
+                            <div class="acc-input-group">
+                                <label>Correo electrónico</label>
+                                <input type="email" id="acc-edit-email" disabled>
+                            </div>
+                            <button class="auth-btn-action" style="margin-top: 15px;" onclick="saveAccountChanges()">Guardar cambios</button>
+                        </div>
+
+                        <div id="sub-view-erikid" class="sub-settings-view">
+                            <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
+                            <h3>ErikID</h3>
+                            <p style="font-size: 13px; color: #888; margin-bottom: 20px; line-height: 1.4;">ErikID habilita la autenticación unificada en todas las aplicaciones del ecosistema ErikHub.</p>
+                            <div class="setting-item">
+                                <span>Activar ErikID</span>
+                                <label class="switch"><input type="checkbox" id="acc-erikid-toggle"><span class="slider"></span></label>
+                            </div>
+                        </div>
+
+                        <!-- SUB-VISTA: SEGURIDAD (CORREGIDA CON ESTADO REAL 2FA / EMAIL OTP) -->
+                        <div id="sub-view-security" class="sub-settings-view">
+                            <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
+                            <h3>Seguridad de la Cuenta</h3>
+                            <div class="setting-item">
+                                <span>Verificación en dos pasos (Email OTP)</span>
+                                <label class="switch"><input type="checkbox" id="acc-2fa-toggle"><span class="slider"></span></label>
+                            </div>
+                            <p style="font-size: 12px; color: #888;">Protege tus accesos con códigos temporales enviados a tu correo.</p>
+                        </div>
+
+                        <div id="sub-view-devices" class="sub-settings-view">
+                            <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
+                            <h3>Dispositivos Vinculados</h3>
+                            <div id="acc-devices-list" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                                <div class="download-item">
+                                    <p>💻 Este ordenador (Panda Browser)</p>
+                                    <span style="color: var(--accent-color);">Activo ahora</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="sub-view-sync" class="sub-settings-view">
+                            <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
+                            <h3>Sincronización en la Nube</h3>
+                            <p style="font-size: 13px; color: #888; margin-bottom: 20px; line-height: 1.4;">Mantén tus marcadores sincronizados entre todos tus dispositivos usando tu cuenta de ErikAccount.</p>
+                            <div class="setting-item">
+                                <span>Sincronizar marcadores</span>
+                                <label class="switch"><input type="checkbox" id="acc-sync-bookmarks-toggle"><span class="slider"></span></label>
+                            </div>
+                            <button class="auth-btn-action" style="margin-top: 20px;" onclick="forceSyncNow()">Sincronizar ahora</button>
+                        </div>
+
+                        <div id="sub-view-multidevice" class="sub-settings-view">
+                            <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
+                            <h3>Pestañas de otros dispositivos</h3>
+                            <p style="font-size: 13px; color: #888; margin-bottom: 15px;">Pestañas abiertas en tus otros dispositivos con la misma sesión:</p>
+                            <div id="remote-tabs-container" style="display: flex; flex-direction: column; gap: 8px;">
+                                <div style="text-align: center; padding: 20px; color: #888; font-size: 13px;">Buscando pestañas remotas...</div>
+                            </div>
+                        </div>
+
+                        <div id="sub-view-erikdrop" class="sub-settings-view">
+                            <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
+                            <h3>ErikDrop</h3>
+                            <p style="font-size: 13px; color: #888; margin-bottom: 15px; line-height: 1.4;">Envía la página web actual instantáneamente a tus otros dispositivos abiertos.</p>
+                            <div class="acc-input-group">
+                                <label>Página actual</label>
+                                <input type="text" id="erikdrop-current-url" disabled>
+                            </div>
+                            <div style="margin-top: 15px;">
+                                <label style="display:block; font-size: 12px; color: #888; margin-bottom: 6px;">Selecciona dispositivo de destino:</label>
+                                <div id="erikdrop-devices-list" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">
+                                    <div style="font-size: 13px; color: #888; padding: 10px;">Buscando dispositivos cercanos...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div id="panel-search" class="settings-panel">
                         <h3>Motor de Búsqueda</h3>
                         <div class="setting-item">
                             <span>Buscador predeterminado</span>
@@ -270,7 +418,6 @@
         </div>
     </div>
 
-    <!-- Modal de Descargas -->
     <div class="settings-overlay" id="downloads-overlay">
         <div class="settings-modal" style="width: 400px; height: 500px; max-height: 80vh;">
             <div class="settings-header">
@@ -282,7 +429,6 @@
             <div class="settings-body" style="flex-direction: column; padding: 20px; overflow-y: auto;">
                 <p style="font-size: 13px; color: #888; text-align: center; margin-bottom: 20px;">Tus archivos descargados recientemente aparecerán aquí.</p>
                 <div class="downloads-list" id="downloads-list">
-                    <!-- Aquí se inyectarían las descargas del backend -->
                     <div style="text-align: center; padding: 40px 0; opacity: 0.5;">
                         <i class="ph ph-folder-open" style="font-size: 40px; margin-bottom: 10px;"></i>
                         <p>No hay descargas activas</p>
@@ -292,19 +438,237 @@
         </div>
     </div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBjzjkLikd6cOJKTUaY2NrvDbezUgH8ncI",
+            authDomain: "erikaccount-db.firebaseapp.com",
+            projectId: "erikaccount-db",
+            storageBucket: "erikaccount-db.firebasestorage.app",
+            messagingSenderId: "586474869924",
+            appId: "1:586474869924:web:9ee8a73d9a198fec334231"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.dbInstance = db;
+
+        window.fetchErikAccountData = async (userId) => {
+            try {
+                const q = query(collection(db, "users"), where("ID", "==", String(userId)));
+                const snap = await getDocs(q);
+                if (!snap.empty) {
+                    const docSnap = snap.docs[0];
+                    return { firestoreId: docSnap.id, ...docSnap.data() };
+                }
+            } catch(e) { console.error("Error obteniendo datos de cuenta:", e); }
+            return null;
+        };
+
+        window.saveAccountChanges = async () => {
+            if (!window.pandaAccount || !window.pandaAccount.firestoreId) return;
+            const newName = document.getElementById('acc-edit-name').value.trim();
+            if (!newName) return alert("El nombre no puede estar vacío");
+
+            try {
+                const userRef = doc(db, "users", window.pandaAccount.firestoreId);
+                await updateDoc(userRef, { Nombre: newName });
+                window.pandaAccount.name = newName;
+                localStorage.setItem('panda_account', JSON.stringify(window.pandaAccount));
+                window.updateAccountUI();
+                alert("¡Cambios guardados con éxito!");
+            } catch(e) {
+                alert("Error al guardar: " + e.message);
+            }
+        };
+
+        window.syncBookmarksToCloud = async (bookmarksArray) => {
+            if (!window.pandaAccount || !window.pandaAccount.firestoreId) return;
+            const syncEnabled = localStorage.getItem('panda_sync_bookmarks') === 'true';
+            if (!syncEnabled) return;
+
+            try {
+                const userRef = doc(db, "users", window.pandaAccount.firestoreId);
+                await updateDoc(userRef, { pandaBookmarks: bookmarksArray });
+            } catch(e) { console.error("Error al sincronizar marcadores a la nube:", e); }
+        };
+
+        window.loadBookmarksFromCloud = async () => {
+            if (!window.pandaAccount || !window.pandaAccount.firestoreId) return;
+            const syncEnabled = localStorage.getItem('panda_sync_bookmarks') === 'true';
+            if (!syncEnabled) return;
+
+            try {
+                const userDoc = await getDoc(doc(db, "users", window.pandaAccount.firestoreId));
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    if (data.pandaBookmarks && Array.isArray(data.pandaBookmarks)) {
+                        localStorage.setItem('panda_bookmarks', JSON.stringify(data.pandaBookmarks));
+                        if (window.renderBookmarks) window.renderBookmarks();
+                    }
+                }
+            } catch(e) { console.error("Error al cargar marcadores de la nube:", e); }
+        };
+
+        window.forceSyncNow = async () => {
+            if (!window.pandaAccount) return alert("Inicia sesión primero para sincronizar.");
+            const currentBms = JSON.parse(localStorage.getItem('panda_bookmarks')) || [];
+            await window.syncBookmarksToCloud(currentBms);
+            await window.loadBookmarksFromCloud();
+            alert("¡Sincronización completada con éxito!");
+        };
+
+        // Enlace real a ErikID y 2FA (Email OTP / email2fa) de la base de datos
+        window.initAccountSecurityStates = async () => {
+            if (!window.pandaAccount || !window.pandaAccount.firestoreId) return;
+            const erikIdToggle = document.getElementById('acc-erikid-toggle');
+            const twoFaToggle = document.getElementById('acc-2fa-toggle');
+
+            try {
+                const userDoc = await getDoc(doc(db, "users", window.pandaAccount.firestoreId));
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    if (erikIdToggle) erikIdToggle.checked = data.erikIdEnabled !== false;
+                    if (twoFaToggle) twoFaToggle.checked = data.email2fa === true; // Conectado al campo real de ErikAccount
+                }
+            } catch(e) { console.error("Error cargando estados de seguridad:", e); }
+
+            if (erikIdToggle) {
+                erikIdToggle.onchange = async (e) => {
+                    const isChecked = e.target.checked;
+                    try {
+                        await updateDoc(doc(db, "users", window.pandaAccount.firestoreId), { erikIdEnabled: isChecked });
+                    } catch(err) {
+                        alert("Error al actualizar ErikID: " + err.message);
+                        erikIdToggle.checked = !isChecked;
+                    }
+                };
+            }
+
+            if (twoFaToggle) {
+                twoFaToggle.onchange = async (e) => {
+                    const isChecked = e.target.checked;
+                    if (isChecked && !window.pandaAccount.verified && window.pandaAccount.verified !== "true") {
+                        alert("Debes verificar tu correo en ErikAccount antes de activar la autenticación de dos pasos.");
+                        twoFaToggle.checked = false;
+                        return;
+                    }
+                    try {
+                        await updateDoc(doc(db, "users", window.pandaAccount.firestoreId), { email2fa: isChecked });
+                    } catch(err) {
+                        alert("Error al actualizar 2FA: " + err.message);
+                        twoFaToggle.checked = !isChecked;
+                    }
+                };
+            }
+        };
+
+        window.initCloudListeners = () => {
+            if (!window.pandaAccount || !window.pandaAccount.firestoreId) return;
+            const userRef = doc(db, "users", window.pandaAccount.firestoreId);
+            
+            onSnapshot(userRef, (docSnap) => {
+                if (!docSnap.exists()) return;
+                const data = docSnap.data();
+
+                const remoteTabsContainer = document.getElementById('remote-tabs-container');
+                if (remoteTabsContainer && data.activeTabs && Array.isArray(data.activeTabs)) {
+                    remoteTabsContainer.innerHTML = '';
+                    const otherTabs = data.activeTabs.filter(t => t.deviceId !== window.pandaDeviceId);
+                    if (otherTabs.length === 0) {
+                        remoteTabsContainer.innerHTML = '<div style="font-size: 13px; color: #888; padding: 15px; text-align:center;">No hay otros dispositivos activos con pestañas abiertas.</div>';
+                    } else {
+                        otherTabs.forEach(t => {
+                            remoteTabsContainer.innerHTML += `
+                                <div class="download-item" style="cursor:pointer;" onclick="loadUrlInActiveTab('${t.url}')">
+                                    <div>
+                                        <p>🌐 ${t.title || t.url}</p>
+                                        <span>Dispositivo: ${t.deviceName || 'Remoto'}</span>
+                                    </div>
+                                    <i class="ph ph-arrow-square-out" style="font-size:18px;"></i>
+                                </div>
+                            `;
+                        });
+                    }
+                }
+
+                if (data.erikDrop && data.erikDrop.targetDeviceId === window.pandaDeviceId && data.erikDrop.timestamp > (window.lastErikDropProcessed || 0)) {
+                    window.lastErikDropProcessed = data.erikDrop.timestamp;
+                    if (confirm(`Has recibido una página por ErikDrop:\n${data.erikDrop.url}\n¿Quieres abrirla?`)) {
+                        if (window.loadUrlInActiveTab) window.loadUrlInActiveTab(data.erikDrop.url);
+                    }
+                }
+            });
+        };
+
+        if (!localStorage.getItem('panda_device_id')) {
+            localStorage.setItem('panda_device_id', 'device_' + Math.random().toString(36).substring(2, 9));
+        }
+        window.pandaDeviceId = localStorage.getItem('panda_device_id');
+
+        window.publishActiveTabToCloud = async (title, url) => {
+            if (!window.pandaAccount || !window.pandaAccount.firestoreId) return;
+            try {
+                const userRef = doc(db, "users", window.pandaAccount.firestoreId);
+                const docSnap = await getDoc(userRef);
+                let tabs = (docSnap.exists() && docSnap.data().activeTabs) ? docSnap.data().activeTabs : [];
+                
+                tabs = tabs.filter(t => t.deviceId !== window.pandaDeviceId);
+                tabs.push({ deviceId: window.pandaDeviceId, deviceName: 'PC Ordenador', title, url, timestamp: Date.now() });
+
+                await updateDoc(userRef, { activeTabs: tabs });
+            } catch(e) { console.error("Error publicando pestaña:", e); }
+        };
+
+        window.sendErikDropToDevice = async (targetDevId) => {
+            if (!window.pandaAccount || !window.pandaAccount.firestoreId) return;
+            const currentTab = window.tabs ? window.tabs.find(t => t.id === window.activeTabId) : null;
+            const currentUrl = currentTab ? currentTab.url : window.location.href;
+
+            try {
+                const userRef = doc(db, "users", window.pandaAccount.firestoreId);
+                await updateDoc(userRef, {
+                    erikDrop: {
+                        targetDeviceId: targetDevId,
+                        url: currentUrl,
+                        timestamp: Date.now()
+                    }
+                });
+                alert("¡Página enviada con éxito por ErikDrop!");
+            } catch(e) {
+                alert("Error al enviar con ErikDrop: " + e.message);
+            }
+        };
+
+        if (window.pandaAccount) {
+            window.fetchErikAccountData(window.pandaAccount.id).then(data => {
+                if(data) {
+                    window.pandaAccount.firestoreId = data.firestoreId;
+                    if(data.photoURL) window.pandaAccount.photo = data.photoURL;
+                    window.pandaAccount.name = data.Nombre || window.pandaAccount.name;
+                    localStorage.setItem('panda_account', JSON.stringify(window.pandaAccount));
+                    window.updateAccountUI();
+                    window.loadBookmarksFromCloud();
+                    window.initCloudListeners();
+                    window.initAccountSecurityStates();
+                }
+            });
+        }
+    </script>
+
     <script>
-        const PANDA_VERSION = "1.0.3";
+        const PANDA_VERSION = "1.0.11";
 
         let settings = JSON.parse(localStorage.getItem('panda_settings')) || { 
-            bookmarksEnabled: true, 
-            showBookmarksBar: false, 
-            shortcutAdded: false, 
-            theme: 'light', 
-            accentColor: '#4CAF50',
-            searchEngine: 'eriksearch'
+            bookmarksEnabled: true, showBookmarksBar: false, shortcutAdded: false, 
+            theme: 'light', accentColor: '#4CAF50', searchEngine: 'eriksearch'
         };
         
         let bookmarks = JSON.parse(localStorage.getItem('panda_bookmarks')) || [{ name: "ErikHub", url: "https://erikhub.com" }];
+        
+        window.pandaAccount = JSON.parse(localStorage.getItem('panda_account')) || null;
 
         let tabs = [];
         let activeTabId = null;
@@ -318,47 +682,210 @@
         const btnStar = document.getElementById('btn-star');
         const navLockIcon = document.getElementById('nav-lock-icon');
 
-        const erikSecureDomains = ['ai.erikhub.com', 'erikhub.com', 'eriksearch.vercel.app'];
-
         document.getElementById('current-version-display').textContent = 'v' + PANDA_VERSION;
 
-        document.getElementById('btn-check-update').addEventListener('click', async () => {
+        document.getElementById('btn-check-update').addEventListener('click', () => {
             const statusText = document.getElementById('update-status');
-            statusText.textContent = "Buscando en panda.erikhub.com...";
+            statusText.textContent = "Conectando con panda.erikhub.com...";
 
-            try {
-                const response = await fetch(`https://panda.erikhub.com/update/version.json?t=${Date.now()}`);
-                const data = await response.json();
-
-                if (data.version !== PANDA_VERSION) {
-                    statusText.innerHTML = `<span style="color: var(--accent-color);">¡Nueva versión ${data.version} encontrada! Descargando...</span>`;
-
-                    const htmlResponse = await fetch(data.fileUrl + `?t=${Date.now()}`);
-                    const newHtml = await htmlResponse.text();
-
-                    if (typeof require !== 'undefined') {
-                        const fs = require('fs');
-                        const path = require('path');
-                        const indexPath = path.join(__dirname, 'index.html');
+            fetch(`https://panda.erikhub.com/update/version.json?t=${Date.now()}`)
+                .then(res => res.json())
+                .then(json => {
+                    if (json.version !== PANDA_VERSION) {
+                        statusText.innerHTML = `<span style="color: var(--accent-color);">¡Versión ${json.version} detectada! Descargando paquete...</span>`;
                         
-                        fs.writeFileSync(indexPath, newHtml, 'utf8');
-
-                        statusText.innerHTML = `<span style="color: var(--accent-color);">¡Actualizado con éxito! Reiniciando Panda...</span>`;
-                        
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 2000);
+                        return fetch(json.fileUrl + `?t=${Date.now()}`)
+                            .then(r => r.text())
+                            .then(htmlData => {
+                                const fs = require('fs');
+                                const path = require('path');
+                                const indexPath = path.join(__dirname, 'index.html');
+                                
+                                fs.writeFileSync(indexPath, htmlData, 'utf8');
+                                statusText.innerHTML = `<span style="color: var(--accent-color);">¡Actualización completada! Reiniciando Panda...</span>`;
+                                
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1500);
+                            });
                     } else {
-                        statusText.innerHTML = `<span style="color: #ffaa00;">Estás en modo web. El archivo se instalaría en Electron.</span>`;
+                        statusText.textContent = "Ya tienes la última versión instalada.";
                     }
-                } else {
-                    statusText.textContent = "Ya tienes la última versión instalada.";
-                }
-            } catch (error) {
-                statusText.innerHTML = `<span style="color: #ff4444;">Error al conectar con el servidor. Revisa si version.json está subido.</span>`;
-                console.error(error);
-            }
+                })
+                .catch(err => {
+                    statusText.textContent = "Usando canal seguro Node.js...";
+                    try {
+                        const https = require('https');
+                        https.get(`https://panda.erikhub.com/update/version.json?t=${Date.now()}`, (resp) => {
+                            let data = '';
+                            resp.on('data', chunk => data += chunk);
+                            resp.on('end', () => {
+                                const json = JSON.parse(data);
+                                if (json.version !== PANDA_VERSION) {
+                                    statusText.innerHTML = `<span style="color: var(--accent-color);">¡Versión ${json.version} encontrada por Node! Instalando...</span>`;
+                                    https.get(json.fileUrl + `?t=${Date.now()}`, (hResp) => {
+                                        let hData = '';
+                                        hResp.on('data', chunk => hData += chunk);
+                                        hResp.on('end', () => {
+                                            const fs = require('fs');
+                                            const path = require('path');
+                                            fs.writeFileSync(path.join(__dirname, 'index.html'), hData, 'utf8');
+                                            statusText.innerHTML = `<span style="color: var(--accent-color);">¡Actualizado! Reiniciando...</span>`;
+                                            setTimeout(() => window.location.reload(), 1500);
+                                        });
+                                    });
+                                } else {
+                                    statusText.textContent = "Ya tienes la última versión instalada.";
+                                }
+                            });
+                        }).on('error', (e2) => {
+                            statusText.innerHTML = `<span style="color: #ff4444;">Error definitivo: ${e2.message}</span>`;
+                        });
+                    } catch(e3) {
+                        statusText.innerHTML = `<span style="color: #ff4444;">Error crítico: ${e3.message}</span>`;
+                    }
+                });
         });
+
+        window.switchAccountSubView = (viewId) => {
+            document.querySelectorAll('.sub-settings-view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            
+            if (viewId === 'sub-view-personal' && window.pandaAccount) {
+                document.getElementById('acc-edit-name').value = window.pandaAccount.name || '';
+                document.getElementById('acc-edit-email').value = window.pandaAccount.email || '';
+            } else if (viewId === 'sub-view-erikdrop') {
+                const currentTab = tabs.find(t => t.id === activeTabId);
+                document.getElementById('erikdrop-current-url').value = currentTab ? currentTab.url : 'https://erikhub.com';
+                
+                if (window.dbInstance && window.pandaAccount && window.pandaAccount.firestoreId) {
+                    import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(async ({doc, getDoc}) => {
+                        const userDoc = await getDoc(doc(window.dbInstance, "users", window.pandaAccount.firestoreId));
+                        if (userDoc.exists() && userDoc.data().activeTabs) {
+                            const list = document.getElementById('erikdrop-devices-list');
+                            list.innerHTML = '';
+                            const devs = userDoc.data().activeTabs.filter(t => t.deviceId !== window.pandaDeviceId);
+                            if (devs.length === 0) {
+                                list.innerHTML = '<div style="font-size:12px; color:#888;">No hay otros dispositivos activos conectados.</div>';
+                            } else {
+                                devs.forEach(d => {
+                                    list.innerHTML += `
+                                        <div class="download-item" style="cursor:pointer;" onclick="sendErikDropToDevice('${d.deviceId}')">
+                                            <p>💻 ${d.deviceName || 'Dispositivo Remoto'}</p>
+                                            <span style="color:var(--accent-color);">Enviar aquí</span>
+                                        </div>
+                                    `;
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        };
+
+        window.updateAccountUI = () => {
+            const iconDefault = document.getElementById('nav-profile-icon');
+            const imgPic = document.getElementById('nav-profile-pic');
+            const viewOut = document.getElementById('acc-view-logged-out');
+            const viewIn = document.getElementById('acc-view-logged-in');
+            const bannerName = document.getElementById('acc-banner-name');
+            const bannerEmail = document.getElementById('acc-banner-email');
+            const bannerDefault = document.getElementById('acc-banner-default');
+            const bannerImg = document.getElementById('acc-banner-img');
+
+            const syncToggle = document.getElementById('acc-sync-bookmarks-toggle');
+            if (syncToggle) {
+                syncToggle.checked = localStorage.getItem('panda_sync_bookmarks') === 'true';
+                syncToggle.onchange = (e) => {
+                    localStorage.setItem('panda_sync_bookmarks', e.target.checked);
+                    if (e.target.checked && window.forceSyncNow) window.forceSyncNow();
+                };
+            }
+
+            if (window.pandaAccount) {
+                viewOut.style.display = 'none';
+                viewIn.style.display = 'block';
+                bannerName.textContent = window.pandaAccount.name;
+                bannerEmail.textContent = window.pandaAccount.email || 'ErikAccount ID: ' + window.pandaAccount.id;
+
+                if (window.pandaAccount.photo) {
+                    iconDefault.style.display = 'none';
+                    imgPic.style.display = 'block';
+                    imgPic.src = window.pandaAccount.photo;
+
+                    bannerDefault.style.display = 'none';
+                    bannerImg.style.display = 'block';
+                    bannerImg.src = window.pandaAccount.photo;
+                } else {
+                    iconDefault.style.display = 'block';
+                    imgPic.style.display = 'none';
+
+                    bannerDefault.style.display = 'flex';
+                    bannerImg.style.display = 'none';
+                }
+            } else {
+                viewOut.style.display = 'block';
+                viewIn.style.display = 'none';
+                iconDefault.style.display = 'block';
+                imgPic.style.display = 'none';
+            }
+        };
+
+        window.loginPandaAccount = (id, name, email, verified) => {
+            window.pandaAccount = { id, name, email, verified, photo: null };
+            localStorage.setItem('panda_account', JSON.stringify(window.pandaAccount));
+            updateAccountUI();
+            
+            if (window.fetchErikAccountData) {
+                window.fetchErikAccountData(id).then(data => {
+                    if (data) {
+                        window.pandaAccount.firestoreId = data.firestoreId;
+                        if (data.photoURL) window.pandaAccount.photo = data.photoURL;
+                        window.pandaAccount.name = data.Nombre || window.pandaAccount.name;
+                        localStorage.setItem('panda_account', JSON.stringify(window.pandaAccount));
+                        updateAccountUI();
+                        if (window.loadBookmarksFromCloud) window.loadBookmarksFromCloud();
+                        if (window.initCloudListeners) window.initCloudListeners();
+                        if (window.initAccountSecurityStates) window.initAccountSecurityStates();
+                    }
+                });
+            }
+        };
+
+        window.logoutPandaAccount = () => {
+            if(confirm('¿Seguro que quieres desconectar tu cuenta de este navegador?')) {
+                window.pandaAccount = null;
+                localStorage.removeItem('panda_account');
+                switchAccountSubView('acc-main-view');
+                updateAccountUI();
+            }
+        };
+
+        document.getElementById('btn-login-erik').addEventListener('click', () => {
+            createNewTab('https://account.erikhub.com/?from=Panda');
+            document.getElementById('settings-overlay').style.display = 'none';
+        });
+
+        document.getElementById('btn-profile').addEventListener('click', () => {
+            document.getElementById('settings-overlay').style.display = 'flex';
+            document.querySelector('.settings-tab-btn[data-target="panel-accounts"]').click();
+            switchAccountSubView('acc-main-view');
+        });
+
+        document.getElementById('btn-erikdrop-bar').addEventListener('click', () => {
+            if (!window.pandaAccount) {
+                alert("Inicia sesión con ErikAccount para usar ErikDrop.");
+                document.getElementById('settings-overlay').style.display = 'flex';
+                document.querySelector('.settings-tab-btn[data-target="panel-accounts"]').click();
+                switchAccountSubView('acc-main-view');
+                return;
+            }
+            document.getElementById('settings-overlay').style.display = 'flex';
+            document.querySelector('.settings-tab-btn[data-target="panel-accounts"]').click();
+            switchAccountSubView('sub-view-erikdrop');
+        });
+
+        const erikSecureDomains = ['ai.erikhub.com', 'erikhub.com', 'eriksearch.vercel.app'];
 
         function checkSecureLock(url) {
             try {
@@ -423,7 +950,6 @@
                 <i class="ph ph-x tab-close"></i>
             `;
             
-            // Drag and Drop (Para reordenar pestañas)
             tabUI.draggable = true;
             tabUI.addEventListener('dragstart', (e) => {
                 e.dataTransfer.setData('text/plain', id);
@@ -432,9 +958,7 @@
             tabUI.addEventListener('dragend', () => {
                 tabUI.style.opacity = tabUI.classList.contains('active') ? '1' : '0.6';
             });
-            tabUI.addEventListener('dragover', (e) => {
-                e.preventDefault(); // Permitir el drop
-            });
+            tabUI.addEventListener('dragover', (e) => { e.preventDefault(); });
             tabUI.addEventListener('drop', (e) => {
                 e.preventDefault();
                 const draggedId = e.dataTransfer.getData('text/plain');
@@ -442,13 +966,11 @@
                     const draggedEl = document.getElementById('ui-' + draggedId);
                     const targetEl = document.getElementById('ui-' + id);
                     
-                    // Reordenar en el Array
                     const draggedIndex = tabs.findIndex(t => t.id === draggedId);
                     const targetIndex = tabs.findIndex(t => t.id === id);
                     const [draggedTab] = tabs.splice(draggedIndex, 1);
                     tabs.splice(targetIndex, 0, draggedTab);
 
-                    // Reordenar en el DOM (Interfaz)
                     if (draggedIndex < targetIndex) {
                         targetEl.parentNode.insertBefore(draggedEl, targetEl.nextSibling);
                     } else {
@@ -470,6 +992,23 @@
             const webviewElement = viewUI.querySelector('webview');
             if(webviewElement) {
                 webviewElement.addEventListener('did-navigate', (e) => {
+                    if (e.url.startsWith('https://panda.erikhub.com/callback')) {
+                        const urlObj = new URL(e.url);
+                        const userId = urlObj.searchParams.get('id');
+                        const userName = urlObj.searchParams.get('name');
+                        const userEmail = urlObj.searchParams.get('email');
+                        const userVerified = urlObj.searchParams.get('verified');
+                        
+                        if (userId) {
+                            window.loginPandaAccount(userId, userName, userEmail, userVerified);
+                            closeTab(id);
+                            document.getElementById('settings-overlay').style.display = 'flex';
+                            document.querySelector('.settings-tab-btn[data-target="panel-accounts"]').click();
+                            switchAccountSubView('acc-main-view');
+                            return;
+                        }
+                    }
+
                     const currentTab = tabs.find(t => t.id === id);
                     if(currentTab) {
                         currentTab.url = e.url;
@@ -478,7 +1017,10 @@
                             currentTab.history.push(e.url);
                             currentTab.currentIndex++;
                         }
-                        if(activeTabId === id) updateTabUIAfterNavigation(currentTab);
+                        if(activeTabId === id) {
+                            updateTabUIAfterNavigation(currentTab);
+                            if (window.publishActiveTabToCloud) window.publishActiveTabToCloud(getTabTitle(e.url), e.url);
+                        }
                     }
                 });
             }
@@ -505,6 +1047,8 @@
             updateNavButtons(currentTab);
             checkIfCurrentIsBookmarked(currentTab.url);
             checkSecureLock(currentTab.url);
+
+            if (window.publishActiveTabToCloud) window.publishActiveTabToCloud(getTabTitle(currentTab.url), currentTab.url);
         }
 
         function closeTab(id) {
@@ -520,8 +1064,9 @@
             }
         }
 
-        function loadUrlInActiveTab(url) {
+        window.loadUrlInActiveTab = function(url) {
             const tab = tabs.find(t => t.id === activeTabId);
+            if (!tab) return;
             tab.history = tab.history.slice(0, tab.currentIndex + 1);
             tab.history.push(url);
             tab.currentIndex++;
@@ -536,14 +1081,18 @@
             setTimeout(() => {
                 view.classList.remove('loading');
                 const ui = document.getElementById('ui-' + activeTabId);
-                ui.querySelector('.tab-title').textContent = getTabTitle(url);
-                ui.querySelector('.tab-favicon').src = getFavicon(url);
+                if(ui) {
+                    ui.querySelector('.tab-title').textContent = getTabTitle(url);
+                    ui.querySelector('.tab-favicon').src = getFavicon(url);
+                }
             }, 300);
 
             updateAddressBar(url);
             updateNavButtons(tab);
             checkIfCurrentIsBookmarked(url);
             checkSecureLock(url);
+
+            if (window.publishActiveTabToCloud) window.publishActiveTabToCloud(getTabTitle(url), url);
         }
 
         function updateNavButtons(tab) {
@@ -575,6 +1124,7 @@
 
         function updateTabUIAfterNavigation(tab) {
             const ui = document.getElementById('ui-' + activeTabId);
+            if (!ui) return;
             ui.querySelector('.tab-title').textContent = getTabTitle(tab.url);
             ui.querySelector('.tab-favicon').src = getFavicon(tab.url);
             updateAddressBar(tab.url);
@@ -620,17 +1170,13 @@
 
         function applySettings() {
             if (settings.theme === 'light') {
-                htmlElement.classList.add('light-theme');
-                bodyElement.classList.add('light-theme');
-                htmlElement.classList.remove('dark-theme');
-                bodyElement.classList.remove('dark-theme');
+                htmlElement.classList.add('light-theme'); bodyElement.classList.add('light-theme');
+                htmlElement.classList.remove('dark-theme'); bodyElement.classList.remove('dark-theme');
                 document.getElementById('theme-light').classList.add('active');
                 document.getElementById('theme-dark').classList.remove('active');
             } else {
-                htmlElement.classList.remove('light-theme');
-                bodyElement.classList.remove('light-theme');
-                htmlElement.classList.add('dark-theme');
-                bodyElement.classList.add('dark-theme');
+                htmlElement.classList.remove('light-theme'); bodyElement.classList.remove('light-theme');
+                htmlElement.classList.add('dark-theme'); bodyElement.classList.add('dark-theme');
                 document.getElementById('theme-dark').classList.add('active');
                 document.getElementById('theme-light').classList.remove('active');
             }
@@ -666,6 +1212,9 @@
                 document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
                 btn.classList.add('active');
                 document.getElementById(btn.dataset.target).classList.add('active');
+                if (btn.dataset.target === 'panel-accounts') {
+                    switchAccountSubView('acc-main-view');
+                }
             });
         });
 
@@ -682,13 +1231,12 @@
         document.getElementById('close-settings').addEventListener('click', () => settingsOverlay.style.display = 'none');
         settingsOverlay.addEventListener('click', (e) => { if(e.target === settingsOverlay) settingsOverlay.style.display = 'none'; });
 
-        // Gestión del Overlay de Descargas
         const downloadsOverlay = document.getElementById('downloads-overlay');
         document.getElementById('btn-downloads').addEventListener('click', () => downloadsOverlay.style.display = 'flex');
         document.getElementById('close-downloads').addEventListener('click', () => downloadsOverlay.style.display = 'none');
         downloadsOverlay.addEventListener('click', (e) => { if(e.target === downloadsOverlay) downloadsOverlay.style.display = 'none'; });
 
-        function renderBookmarks() {
+        window.renderBookmarks = function() {
             const bar = document.getElementById('bookmarks-bar');
             bar.innerHTML = '';
             bookmarks.forEach((bm) => {
@@ -696,22 +1244,19 @@
                 a.className = 'bookmark-item';
                 a.innerHTML = `<img src="${getFavicon(bm.url)}" style="width:14px; height:14px; border-radius:3px; object-fit:contain;"> ${bm.name}`;
                 
-                // Click izquierdo normal para abrir
                 a.onclick = () => loadUrlInActiveTab(bm.url);
                 
-                // Clic derecho (Control derecho) para eliminar
                 a.addEventListener('contextmenu', (e) => {
                     e.preventDefault();
                     if(confirm(`¿Quieres eliminar el marcador "${bm.name}"?`)) {
                         bookmarks = bookmarks.filter(b => b.url !== bm.url);
                         localStorage.setItem('panda_bookmarks', JSON.stringify(bookmarks));
                         renderBookmarks();
+                        if (window.syncBookmarksToCloud) window.syncBookmarksToCloud(bookmarks);
                     }
                 });
-
                 bar.appendChild(a);
             });
-            
             if(activeTabId) {
                 const tab = tabs.find(t => t.id === activeTabId);
                 if(tab) checkIfCurrentIsBookmarked(tab.url);
@@ -729,27 +1274,34 @@
             }
         }
 
-        // Fix de Guardado Rápido de Marcadores
+        // CORRECCIÓN ABSOLUTA PARA GUARDAR NUEVOS MARCADORES
         btnStar.addEventListener('click', () => {
             const tab = tabs.find(t => t.id === activeTabId);
+            if (!tab) return;
             const currentUrl = tab.url;
 
             const existingIndex = bookmarks.findIndex(bm => bm.url === currentUrl);
-            
-            // Si ya existe, lo eliminamos. Si no, lo creamos.
             if (existingIndex >= 0) {
                 bookmarks.splice(existingIndex, 1);
             } else {
                 const name = prompt("Nombre del marcador:", getTabTitle(currentUrl));
-                if (name !== null) { // Solo guarda si el usuario no canceló el cuadro de diálogo
-                    bookmarks.push({ name, url: currentUrl });
+                if (name !== null && name.trim() !== "") {
+                    bookmarks.push({ name: name.trim(), url: currentUrl });
+                } else {
+                    return;
                 }
             }
             
-            // Guardamos, forzamos actualización visual al momento y renderizamos
             localStorage.setItem('panda_bookmarks', JSON.stringify(bookmarks));
             checkIfCurrentIsBookmarked(currentUrl); 
             renderBookmarks();
+
+            if (window.syncBookmarksToCloud) window.syncBookmarksToCloud(bookmarks);
+
+            const bookmarksBar = document.getElementById('bookmarks-bar');
+            if (settings.bookmarksEnabled && settings.showBookmarksBar) {
+                bookmarksBar.style.display = 'flex';
+            }
         });
 
         document.getElementById('btn-shortcut-bookmarks').addEventListener('click', () => {
@@ -766,6 +1318,7 @@
         document.getElementById('close-ai').addEventListener('click', toggleSidebar);
 
         applySettings();
+        updateAccountUI();
         createNewTab();
     </script>
 </body>
