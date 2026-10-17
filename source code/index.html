@@ -176,6 +176,9 @@
         .acc-input-group label { display: block; font-size: 12px; color: #888; margin-bottom: 4px; font-weight: 500; }
         .acc-input-group input { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-color); font-size: 14px; outline: none; }
         .acc-input-group input:focus { border-color: var(--accent-color); }
+        
+        /* MAC Window Buttons Space */
+        body.is-mac .tabs-bar { padding-left: 78px; }
     </style>
 </head>
 <body class="light-theme">
@@ -313,7 +316,6 @@
                             </div>
                         </div>
 
-                        <!-- SUB-VISTA: SEGURIDAD (CORREGIDA CON ESTADO REAL 2FA / EMAIL OTP) -->
                         <div id="sub-view-security" class="sub-settings-view">
                             <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
                             <h3>Seguridad de la Cuenta</h3>
@@ -441,19 +443,40 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js"; 
 
         const firebaseConfig = {
             apiKey: "AIzaSyBjzjkLikd6cOJKTUaY2NrvDbezUgH8ncI",
             authDomain: "erikaccount-db.firebaseapp.com",
+            databaseURL: "https://erikaccount-db-default-rtdb.europe-west1.firebasedatabase.app", 
             projectId: "erikaccount-db",
             storageBucket: "erikaccount-db.firebasestorage.app",
             messagingSenderId: "586474869924",
-            appId: "1:586474869924:web:9ee8a73d9a198fec334231"
+            appId: "1:586474869924:web:9ccd77342f87eec1334231",
+            measurementId: "G-CLX13YXSZK"
         };
+        
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const rtdb = getDatabase(app); 
 
         window.dbInstance = db;
+
+        // NUEVO: Verificador de API Keys de Panda (SSL-like)
+        window.verifyPandaApiKey = async (apiKey, currentDomain) => {
+            try {
+                const dbRef = ref(rtdb, 'panda_api_keys/' + apiKey);
+                const snapshot = await get(dbRef);
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    const normalize = d => d.replace(/^www\./, '').split('/')[0].toLowerCase();
+                    return normalize(data.domain) === normalize(currentDomain);
+                }
+            } catch (e) {
+                console.error("Error validando API Key:", e);
+            }
+            return false;
+        };
 
         window.fetchErikAccountData = async (userId) => {
             try {
@@ -520,7 +543,6 @@
             alert("¡Sincronización completada con éxito!");
         };
 
-        // Enlace real a ErikID y 2FA (Email OTP / email2fa) de la base de datos
         window.initAccountSecurityStates = async () => {
             if (!window.pandaAccount || !window.pandaAccount.firestoreId) return;
             const erikIdToggle = document.getElementById('acc-erikid-toggle');
@@ -531,7 +553,7 @@
                 if (userDoc.exists()) {
                     const data = userDoc.data();
                     if (erikIdToggle) erikIdToggle.checked = data.erikIdEnabled !== false;
-                    if (twoFaToggle) twoFaToggle.checked = data.email2fa === true; // Conectado al campo real de ErikAccount
+                    if (twoFaToggle) twoFaToggle.checked = data.email2fa === true; 
                 }
             } catch(e) { console.error("Error cargando estados de seguridad:", e); }
 
@@ -659,7 +681,11 @@
     </script>
 
     <script>
-        const PANDA_VERSION = "1.0.11";
+        const PANDA_VERSION = "1.0.12";
+
+        if (navigator.userAgent.includes('Mac')) {
+            document.body.classList.add('is-mac');
+        }
 
         let settings = JSON.parse(localStorage.getItem('panda_settings')) || { 
             bookmarksEnabled: true, showBookmarksBar: false, shortcutAdded: false, 
@@ -673,6 +699,8 @@
         let tabs = [];
         let activeTabId = null;
         let tabCounter = 0;
+        window.tabs = tabs; // Expose globally for ErikDrop
+        window.activeTabId = activeTabId;
 
         const tabsList = document.getElementById('tabs-list');
         const viewsContainer = document.getElementById('web-views-container');
@@ -885,24 +913,51 @@
             switchAccountSubView('sub-view-erikdrop');
         });
 
-        const erikSecureDomains = ['ai.erikhub.com', 'erikhub.com', 'eriksearch.vercel.app'];
+        const erikSecureDomains = ['ai.erikhub.com', 'erikhub.com', 'eriksearch.vercel.app', 'account.erikhub.com', 'api.panda.erikhub.com'];
 
-        function checkSecureLock(url) {
+        async function checkSecureLock(url, tabIdToCheck) {
+            // Si es la pestaña activa, reseteamos el icono mientras carga
+            if (activeTabId === tabIdToCheck) {
+                navLockIcon.classList.remove('lock-secure', 'ph-fill');
+                navLockIcon.classList.add('ph');
+            }
+
             try {
-                const domain = new URL(url).hostname.replace('www.', '');
+                const urlObj = new URL(url);
+                const domain = urlObj.hostname.replace(/^www\./, '');
+                const origin = urlObj.origin;
+
+                // 1. Dominios por defecto (ErikHub Ecosystem)
                 if (erikSecureDomains.includes(domain)) {
-                    navLockIcon.classList.add('lock-secure');
-                    navLockIcon.classList.remove('ph');
-                    navLockIcon.classList.add('ph-fill');
-                } else {
-                    navLockIcon.classList.remove('lock-secure');
-                    navLockIcon.classList.remove('ph-fill');
-                    navLockIcon.classList.add('ph');
+                    if (activeTabId === tabIdToCheck) {
+                        navLockIcon.classList.add('lock-secure', 'ph-fill');
+                        navLockIcon.classList.remove('ph');
+                    }
+                    return;
+                }
+
+                // 2. Validación de panda.json (SSL nativo de Panda)
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 3500); 
+                
+                const response = await fetch(`${origin}/panda.json`, { signal: controller.signal }).catch(() => null);
+                clearTimeout(timeoutId);
+
+                if (response && response.ok) {
+                    const data = await response.json().catch(() => null);
+                    if (data && data.api) {
+                        // 3. Verificamos la API Key con Firebase Realtime Database
+                        if (window.verifyPandaApiKey) {
+                            const isValid = await window.verifyPandaApiKey(data.api, domain);
+                            if (isValid && activeTabId === tabIdToCheck) {
+                                navLockIcon.classList.add('lock-secure', 'ph-fill');
+                                navLockIcon.classList.remove('ph');
+                            }
+                        }
+                    }
                 }
             } catch (e) {
-                navLockIcon.classList.remove('lock-secure');
-                navLockIcon.classList.remove('ph-fill');
-                navLockIcon.classList.add('ph');
+                // Ignore, keep it unsecure
             }
         }
 
@@ -1038,6 +1093,7 @@
             }
 
             activeTabId = id;
+            window.activeTabId = activeTabId;
             const currentTab = tabs.find(t => t.id === id);
 
             document.getElementById('ui-' + id).classList.add('active');
@@ -1046,7 +1102,7 @@
             updateAddressBar(currentTab.url);
             updateNavButtons(currentTab);
             checkIfCurrentIsBookmarked(currentTab.url);
-            checkSecureLock(currentTab.url);
+            checkSecureLock(currentTab.url, id);
 
             if (window.publishActiveTabToCloud) window.publishActiveTabToCloud(getTabTitle(currentTab.url), currentTab.url);
         }
@@ -1090,7 +1146,7 @@
             updateAddressBar(url);
             updateNavButtons(tab);
             checkIfCurrentIsBookmarked(url);
-            checkSecureLock(url);
+            checkSecureLock(url, activeTabId);
 
             if (window.publishActiveTabToCloud) window.publishActiveTabToCloud(getTabTitle(url), url);
         }
@@ -1130,7 +1186,7 @@
             updateAddressBar(tab.url);
             updateNavButtons(tab);
             checkIfCurrentIsBookmarked(tab.url);
-            checkSecureLock(tab.url);
+            checkSecureLock(tab.url, tab.id);
         }
 
         btnBack.addEventListener('click', () => {
@@ -1274,7 +1330,6 @@
             }
         }
 
-        // CORRECCIÓN ABSOLUTA PARA GUARDAR NUEVOS MARCADORES
         btnStar.addEventListener('click', () => {
             const tab = tabs.find(t => t.id === activeTabId);
             if (!tab) return;
