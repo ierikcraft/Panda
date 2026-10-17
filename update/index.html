@@ -31,6 +31,8 @@
             --bg-gradient: radial-gradient(circle at top right, #ffffff, #eef2f5); color-scheme: light; 
         }
 
+        html.dark-theme, body.dark-theme { color-scheme: dark; }
+
         * { box-sizing: border-box; }
 
         .browser-header { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); position: relative; z-index: 100; display: flex; flex-direction: column; -webkit-app-region: drag; flex-shrink: 0; }
@@ -311,6 +313,7 @@
                             </div>
                         </div>
 
+                        <!-- SUB-VISTA: SEGURIDAD (CORREGIDA CON ESTADO REAL 2FA / EMAIL OTP) -->
                         <div id="sub-view-security" class="sub-settings-view">
                             <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
                             <h3>Seguridad de la Cuenta</h3>
@@ -517,28 +520,49 @@
             alert("¡Sincronización completada con éxito!");
         };
 
-        window.initErikIdRealState = async () => {
+        // Enlace real a ErikID y 2FA (Email OTP / email2fa) de la base de datos
+        window.initAccountSecurityStates = async () => {
             if (!window.pandaAccount || !window.pandaAccount.firestoreId) return;
-            const toggle = document.getElementById('acc-erikid-toggle');
-            if (!toggle) return;
+            const erikIdToggle = document.getElementById('acc-erikid-toggle');
+            const twoFaToggle = document.getElementById('acc-2fa-toggle');
 
             try {
                 const userDoc = await getDoc(doc(db, "users", window.pandaAccount.firestoreId));
                 if (userDoc.exists()) {
                     const data = userDoc.data();
-                    toggle.checked = data.erikIdEnabled !== false;
+                    if (erikIdToggle) erikIdToggle.checked = data.erikIdEnabled !== false;
+                    if (twoFaToggle) twoFaToggle.checked = data.email2fa === true; // Conectado al campo real de ErikAccount
                 }
-            } catch(e) { console.error("Error cargando estado ErikID:", e); }
+            } catch(e) { console.error("Error cargando estados de seguridad:", e); }
 
-            toggle.onchange = async (e) => {
-                const isChecked = e.target.checked;
-                try {
-                    await updateDoc(doc(db, "users", window.pandaAccount.firestoreId), { erikIdEnabled: isChecked });
-                } catch(err) {
-                    alert("Error al actualizar ErikID: " + err.message);
-                    toggle.checked = !isChecked;
-                }
-            };
+            if (erikIdToggle) {
+                erikIdToggle.onchange = async (e) => {
+                    const isChecked = e.target.checked;
+                    try {
+                        await updateDoc(doc(db, "users", window.pandaAccount.firestoreId), { erikIdEnabled: isChecked });
+                    } catch(err) {
+                        alert("Error al actualizar ErikID: " + err.message);
+                        erikIdToggle.checked = !isChecked;
+                    }
+                };
+            }
+
+            if (twoFaToggle) {
+                twoFaToggle.onchange = async (e) => {
+                    const isChecked = e.target.checked;
+                    if (isChecked && !window.pandaAccount.verified && window.pandaAccount.verified !== "true") {
+                        alert("Debes verificar tu correo en ErikAccount antes de activar la autenticación de dos pasos.");
+                        twoFaToggle.checked = false;
+                        return;
+                    }
+                    try {
+                        await updateDoc(doc(db, "users", window.pandaAccount.firestoreId), { email2fa: isChecked });
+                    } catch(err) {
+                        alert("Error al actualizar 2FA: " + err.message);
+                        twoFaToggle.checked = !isChecked;
+                    }
+                };
+            }
         };
 
         window.initCloudListeners = () => {
@@ -628,14 +652,14 @@
                     window.updateAccountUI();
                     window.loadBookmarksFromCloud();
                     window.initCloudListeners();
-                    window.initErikIdRealState();
+                    window.initAccountSecurityStates();
                 }
             });
         }
     </script>
 
     <script>
-        const PANDA_VERSION = "1.0.10";
+        const PANDA_VERSION = "1.0.11";
 
         let settings = JSON.parse(localStorage.getItem('panda_settings')) || { 
             bookmarksEnabled: true, showBookmarksBar: false, shortcutAdded: false, 
@@ -660,12 +684,10 @@
 
         document.getElementById('current-version-display').textContent = 'v' + PANDA_VERSION;
 
-        // SISTEMA OTA BLINDADO CONTRA CORS Y BLOQUEOS DE NODE
         document.getElementById('btn-check-update').addEventListener('click', () => {
             const statusText = document.getElementById('update-status');
             statusText.textContent = "Conectando con panda.erikhub.com...";
 
-            // Método híbrido fetch estándar (por si tu servidor ya tiene CORS habilitado o pasa por proxy)
             fetch(`https://panda.erikhub.com/update/version.json?t=${Date.now()}`)
                 .then(res => res.json())
                 .then(json => {
@@ -691,7 +713,6 @@
                     }
                 })
                 .catch(err => {
-                    // Fallback directo con Node.js si fetch del navegador da CORS
                     statusText.textContent = "Usando canal seguro Node.js...";
                     try {
                         const https = require('https');
@@ -825,7 +846,7 @@
                         updateAccountUI();
                         if (window.loadBookmarksFromCloud) window.loadBookmarksFromCloud();
                         if (window.initCloudListeners) window.initCloudListeners();
-                        if (window.initErikIdRealState) window.initErikIdRealState();
+                        if (window.initAccountSecurityStates) window.initAccountSecurityStates();
                     }
                 });
             }
@@ -851,7 +872,6 @@
             switchAccountSubView('acc-main-view');
         });
 
-        // Botón ErikDrop superior
         document.getElementById('btn-erikdrop-bar').addEventListener('click', () => {
             if (!window.pandaAccount) {
                 alert("Inicia sesión con ErikAccount para usar ErikDrop.");
@@ -1044,8 +1064,9 @@
             }
         }
 
-        function loadUrlInActiveTab(url) {
+        window.loadUrlInActiveTab = function(url) {
             const tab = tabs.find(t => t.id === activeTabId);
+            if (!tab) return;
             tab.history = tab.history.slice(0, tab.currentIndex + 1);
             tab.history.push(url);
             tab.currentIndex++;
@@ -1060,8 +1081,10 @@
             setTimeout(() => {
                 view.classList.remove('loading');
                 const ui = document.getElementById('ui-' + activeTabId);
-                ui.querySelector('.tab-title').textContent = getTabTitle(url);
-                ui.querySelector('.tab-favicon').src = getFavicon(url);
+                if(ui) {
+                    ui.querySelector('.tab-title').textContent = getTabTitle(url);
+                    ui.querySelector('.tab-favicon').src = getFavicon(url);
+                }
             }, 300);
 
             updateAddressBar(url);
@@ -1101,6 +1124,7 @@
 
         function updateTabUIAfterNavigation(tab) {
             const ui = document.getElementById('ui-' + activeTabId);
+            if (!ui) return;
             ui.querySelector('.tab-title').textContent = getTabTitle(tab.url);
             ui.querySelector('.tab-favicon').src = getFavicon(tab.url);
             updateAddressBar(tab.url);
@@ -1250,6 +1274,7 @@
             }
         }
 
+        // CORRECCIÓN ABSOLUTA PARA GUARDAR NUEVOS MARCADORES
         btnStar.addEventListener('click', () => {
             const tab = tabs.find(t => t.id === activeTabId);
             if (!tab) return;
@@ -1260,8 +1285,8 @@
                 bookmarks.splice(existingIndex, 1);
             } else {
                 const name = prompt("Nombre del marcador:", getTabTitle(currentUrl));
-                if (name !== null) {
-                    bookmarks.push({ name, url: currentUrl });
+                if (name !== null && name.trim() !== "") {
+                    bookmarks.push({ name: name.trim(), url: currentUrl });
                 } else {
                     return;
                 }
