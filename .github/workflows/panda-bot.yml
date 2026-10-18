@@ -4,21 +4,25 @@ on:
   issues:
     types: [opened]
 
-permissions:
-  issues: write
-
 jobs:
   review_and_publish:
     runs-on: ubuntu-latest
     if: contains(github.event.issue.title, '[Extensión]')
     steps:
+      - name: Generar Token de Panda App
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.PANDA_APP_ID }}
+          private-key: ${{ secrets.PANDA_APP_PEM }}
+
       - name: Revisar y Publicar Extensión
         uses: actions/github-script@v6
         with:
+          github-token: ${{ steps.generate_token.outputs.token }}
           script: |
             const issueBody = context.payload.issue.body;
             
-            // 1. Extraer el JSON del cuerpo del issue
             const jsonMatch = issueBody.match(/```json\s+([\s\S]*?)\s+```/);
             
             if (!jsonMatch) {
@@ -34,35 +38,28 @@ jobs:
               const extension = JSON.parse(jsonMatch[1]);
               const extString = JSON.stringify(extension).toLowerCase();
               let errors = [];
-
-              // --- 2. COMPROBACIÓN DE NORMAS ESTRICTAS DE PANDA ---
               
-              // Norma 1: Sin malas palabras
               const badWords = ["puta", "mierda", "joder", "idiota", "porno", "sex", "ads", "anuncio"];
               if (badWords.some(word => extString.includes(word))) {
                 errors.push("- Contiene lenguaje, contenido inapropiado o anuncios.");
               }
 
-              // Norma 2: Nav Bar NO puede ser IA
               if (extension.permisos && extension.permisos.includes("nav bar")) {
-                if (extString.includes("ia") || extString.includes("ai") || extString.includes("chatgpt")) {
+                if (/\b(ia|ai|chatgpt)\b/.test(extString)) {
                   errors.push("- Las extensiones en la Nav Bar no pueden ser IAs.");
                 }
               }
 
-              // Norma 3: Ajustes NO puede tener cuentas externas
               if (extension.inajustes) {
                 if (extString.includes("login") || extString.includes("auth") || extString.includes("password")) {
                   errors.push("- No se permite crear sistemas de cuentas propios en los ajustes.");
                 }
               }
 
-              // Norma 4: No enviar datos a fuera (Fetch/XMLHttpRequest)
               if (extString.includes("fetch(") || extString.includes("xmlhttprequest")) {
                 errors.push("- No se permite robar o enviar datos a servidores externos (fetch bloqueado).");
               }
 
-              // Si hay errores, rechazar y cerrar
               if (errors.length > 0) {
                 await github.rest.issues.createComment({
                   owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number,
@@ -72,10 +69,7 @@ jobs:
                 return;
               }
 
-              // --- 3. APROBAR Y SUBIR A FIREBASE ---
-              // Generamos un ID único basado en el tiempo
               const extId = 'ext_' + Date.now();
-              
               const firebaseDbUrl = "https://erikaccount-db-default-rtdb.europe-west1.firebasedatabase.app/panda_extensions/" + extId + ".json";
               const firebaseUrlWithAuth = `${firebaseDbUrl}?auth=${process.env.FIREBASE_SECRET}`;
 
