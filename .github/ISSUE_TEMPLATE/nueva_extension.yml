@@ -26,7 +26,7 @@ body:
   - type: checkboxes
     id: rules
     attributes:
-      label: Aceptación de Normas de ErikHub
+      label: Aceptación de Normas de Panda
       description: Si mientes en estas casillas, el Bot de Seguridad rechazará tu extensión.
       options:
         - label: Confirmo que si es un botón de Nav Bar, NO es una IA.
