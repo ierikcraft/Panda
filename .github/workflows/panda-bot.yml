@@ -7,7 +7,8 @@ on:
 jobs:
   review_and_publish:
     runs-on: ubuntu-latest
-    if: contains(github.event.issue.labels.*.name, 'extension')
+    # Esta es la línea clave que hemos arreglado: ahora lee el título en lugar de la etiqueta
+    if: contains(github.event.issue.title, '[Extensión]')
     steps:
       - name: Revisar y Publicar Extensión
         uses: actions/github-script@v6
@@ -21,7 +22,7 @@ jobs:
             if (!jsonMatch) {
               await github.rest.issues.createComment({
                 owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number,
-                body: "❌ **Error del Bot:** No he encontrado un código JSON válido en tu petición. Por favor, asegúrate de poner el código dentro del bloque."
+                body: "❌ **Error del Bot:** No he encontrado un código JSON válido en tu petición. Por favor, asegúrate de poner el código dentro del bloque ```json ... ```."
               });
               await github.rest.issues.update({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number, state: 'closed' });
               return;
@@ -70,11 +71,10 @@ jobs:
               }
 
               // --- 3. APROBAR Y SUBIR A FIREBASE ---
-              // Generamos un ID único basado en el número de issue
+              // Generamos un ID único basado en el tiempo
               const extId = 'ext_' + Date.now();
               
               const firebaseDbUrl = "https://erikaccount-db-default-rtdb.europe-west1.firebasedatabase.app/panda_extensions/" + extId + ".json";
-              // Aquí usarías el SECRETO de Firebase de tu repositorio
               const firebaseUrlWithAuth = `${firebaseDbUrl}?auth=${process.env.FIREBASE_SECRET}`;
 
               const response = await fetch(firebaseUrlWithAuth, {
@@ -88,13 +88,16 @@ jobs:
                   body: "✅ **¡Extensión Aprobada y Publicada!**\n\nTu extensión **" + extension.name + "** ha pasado todos los controles de seguridad y acaba de ser añadida a la Tienda Panda. ¡Todos los usuarios ya pueden instalarla!"
                 });
                 await github.rest.issues.update({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number, state: 'closed', labels: ['publicado'] });
+              } else {
+                throw new Error("No se pudo subir a Firebase.");
               }
 
             } catch (err) {
               await github.rest.issues.createComment({
                 owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number,
-                body: "❌ **Error JSON:** El código que has enviado no tiene un formato JSON válido. Comprueba las comas y comillas."
+                body: "❌ **Error JSON/Sistema:** El código que has enviado no tiene un formato JSON válido o hubo un error al conectar con Firebase. Revisa que el JSON esté bien escrito."
               });
+              await github.rest.issues.update({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number, state: 'closed' });
             }
         env:
           FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
