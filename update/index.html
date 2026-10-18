@@ -15,6 +15,8 @@
             --input-bg: rgba(0, 0, 0, 0.4);
             --bg-gradient: radial-gradient(circle at top right, #252525, #0f0f0f);
             --accent-color: #4CAF50;
+            --ext-color1: transparent;
+            --ext-color2: transparent;
         }
 
         html { color-scheme: light; width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; }
@@ -23,6 +25,10 @@
             width: 100%; height: 100%; margin: 0; padding: 0; display: flex; flex-direction: column; overflow: hidden;
             background-color: var(--bg-color); color: var(--text-color); background-image: var(--bg-gradient); 
             transition: background 0.3s ease, color 0.3s ease; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body.has-ext-theme {
+            background-image: linear-gradient(135deg, var(--ext-color1), var(--ext-color2)) !important;
         }
 
         html.light-theme, body.light-theme {
@@ -43,7 +49,7 @@
         .tab { background: var(--glass-bg); border: 1px solid var(--glass-border); border-bottom: none; border-radius: 8px 8px 0 0; padding: 6px 15px; font-size: 13px; display: flex; align-items: center; gap: 8px; color: var(--text-color); min-width: 140px; max-width: 200px; height: 32px; cursor: grab; opacity: 0.6; transition: all 0.2s, opacity 0s; position: relative; }
         .tab:active { cursor: grabbing; }
         .tab.active { opacity: 1; height: 34px; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
-        .tab.active::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: var(--glass-bg); z-index: 2; }
+        .tab.active::after { content: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: var(--glass-bg); z-index: 2; }
         .tab-favicon { width: 14px; height: 14px; border-radius: 3px; object-fit: contain; pointer-events: none; }
         .tab-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-grow: 1; pointer-events: none; }
         .tab-close { margin-left: auto; font-size: 14px; color: #888; padding: 2px; border-radius: 4px; cursor: pointer; }
@@ -92,7 +98,7 @@
         .web-view.loading { opacity: 0.5; }
         webview { width: 100%; height: 100%; border: none; display: flex; background-color: #fff; flex: 1; }
 
-        .ai-sidebar { width: 350px; height: 100%; background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-left: 1px solid var(--glass-border); display: none; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.2); }
+        .sidebar-container { width: 350px; height: 100%; background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-left: 1px solid var(--glass-border); display: none; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.2); }
         .sidebar-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid var(--glass-border); flex-shrink: 0; }
         .sidebar-brand { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
         .sidebar-brand img { height: 20px; border-radius: 4px; }
@@ -141,7 +147,7 @@
         html.light-theme .auth-btn-action:hover { background-color: #0056b3; }
         
         .downloads-list { display: flex; flex-direction: column; gap: 10px; }
-        .download-item { padding: 12px; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .download-item { padding: 12px; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .download-item p { margin: 0; font-size: 14px; font-weight: 500; }
         .download-item span { font-size: 12px; color: #888; }
 
@@ -174,38 +180,32 @@
         
         .acc-input-group { margin-bottom: 12px; text-align: left; }
         .acc-input-group label { display: block; font-size: 12px; color: #888; margin-bottom: 4px; font-weight: 500; }
-        .acc-input-group input { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-color); font-size: 14px; outline: none; }
-        .acc-input-group input:focus { border-color: var(--accent-color); }
-        
-        /* MAC Window Buttons Space */
+        .acc-input-group input, .acc-input-group textarea { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-color); font-size: 14px; outline: none; font-family: monospace; }
+        .acc-input-group input:focus, .acc-input-group textarea:focus { border-color: var(--accent-color); }
+
         body.is-mac .tabs-bar { padding-left: 78px; }
 
-        /* Estilos Increíbles Panda 1.0 */
         .panda-version-title {
-            font-size: 64px;
-            font-weight: 800;
-            margin: 0 0 5px 0;
+            font-size: 64px; font-weight: 800; margin: 0 0 5px 0;
             background: linear-gradient(135deg, #ff4b2b 0%, #ff416c 25%, #8a2be2 50%, #4a00e0 75%, #00d4ff 100%);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradientShift 4s ease infinite;
-            letter-spacing: -2px;
-            text-align: center;
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: gradientShift 4s ease infinite; letter-spacing: -2px; text-align: center;
         }
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .panda-version-subtitle { text-align: center; color: #888; font-size: 14px; margin-bottom: 30px; letter-spacing: 1px; text-transform: uppercase; }
+
+        .ext-store-item {
+            background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 12px; padding: 15px; margin-bottom: 12px;
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .panda-version-subtitle {
-            text-align: center;
-            color: #888;
-            font-size: 14px;
-            margin-bottom: 30px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
+        .ext-info h4 { margin: 0 0 4px 0; font-size: 15px; }
+        .ext-info p { margin: 0; font-size: 12px; color: #888; }
+        .ext-badge { display: inline-block; padding: 2px 6px; background: rgba(76, 175, 80, 0.2); color: #4CAF50; border-radius: 4px; font-size: 10px; font-weight: bold; margin-top: 5px; text-transform: uppercase; }
+        .btn-install-ext { background: var(--accent-color); color: #000; border: none; padding: 6px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; }
+        .btn-uninstall-ext { background: transparent; color: #ff4444; border: 1px solid #ff4444; padding: 6px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; }
+        
+        .ext-dev-btn { background: none; border: 1px dashed var(--glass-border); color: #888; width: 100%; padding: 15px; border-radius: 8px; cursor: pointer; margin-top: 20px; transition: all 0.2s; }
+        .ext-dev-btn:hover { border-color: var(--accent-color); color: var(--accent-color); }
     </style>
 </head>
 <body class="light-theme">
@@ -232,7 +232,7 @@
                 </div>
             </div>
 
-            <div class="extensions">
+            <div class="extensions" id="nav-extensions-container">
                 <button id="btn-shortcut-bookmarks" class="icon-btn" title="Marcadores" style="display: none;"><i class="ph ph-bookmarks"></i></button>
                 <button id="btn-downloads" class="icon-btn" title="Descargas"><i class="ph ph-download-simple"></i></button>
                 <button id="btn-settings" class="icon-btn" title="Ajustes"><i class="ph ph-gear-six"></i></button>
@@ -252,7 +252,7 @@
     <div class="main-content">
         <div class="web-views-container" id="web-views-container"></div>
         
-        <div class="ai-sidebar" id="ai-sidebar">
+        <div class="sidebar-container" id="ai-sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-brand">
                     <img src="https://ai.erikhub.com/source/New%20logo%20in%20ErikAi.gif" alt="ErikAI">
@@ -262,6 +262,8 @@
             </div>
             <webview id="ai-frame" src="https://ai.erikhub.com/chat.html" allowpopups style="width: 100%; height: 100%; display: flex; border: none; flex: 1;"></webview>
         </div>
+
+        <div id="extensions-sidebars-wrapper"></div>
     </div>
 
     <div class="settings-overlay" id="settings-overlay">
@@ -271,28 +273,23 @@
                 <button id="close-settings" class="icon-btn" style="width: 28px; height: 28px;"><i class="ph ph-x"></i></button>
             </div>
             <div class="settings-body">
-                <div class="settings-sidebar">
+                <div class="settings-sidebar" id="settings-sidebar-tabs">
                     <div class="settings-tab-btn active" data-target="panel-accounts"><i class="ph ph-user-circle"></i> Cuentas</div>
                     <div class="settings-tab-btn" data-target="panel-search"><i class="ph ph-magnifying-glass"></i> Buscar</div>
                     <div class="settings-tab-btn" data-target="panel-bookmarks"><i class="ph ph-bookmarks"></i> Marcadores</div>
                     <div class="settings-tab-btn" data-target="panel-appearance"><i class="ph ph-palette"></i> Apariencia</div>
+                    <div class="settings-tab-btn" data-target="panel-extensions"><i class="ph ph-puzzle-piece"></i> Extensiones</div>
                     <div class="settings-tab-btn" data-target="panel-update"><i class="ph ph-sparkle"></i> Panda 1.0</div>
                 </div>
-                <div class="settings-content-area">
+                <div class="settings-content-area" id="settings-content-wrapper">
                     
                     <div id="panel-accounts" class="settings-panel active">
-                        
                         <div id="acc-main-view" class="sub-settings-view active">
                             <div id="acc-view-logged-out">
                                 <h3>Iniciar Sesión</h3>
-                                <p style="font-size: 14px; color: #888; text-align: center; margin-top: 30px; line-height: 1.5;">
-                                    Sincroniza tu historial, marcadores y ajustes.<br>Conéctate al ecosistema con ErikAccount.
-                                </p>
-                                <button id="btn-login-erik" class="auth-btn-action">
-                                    Iniciar sesión con ErikAccount
-                                </button>
+                                <p style="font-size: 14px; color: #888; text-align: center; margin-top: 30px; line-height: 1.5;">Sincroniza tu historial, marcadores y ajustes.<br>Conéctate al ecosistema con ErikAccount.</p>
+                                <button id="btn-login-erik" class="auth-btn-action">Iniciar sesión con ErikAccount</button>
                             </div>
-
                             <div id="acc-view-logged-in" style="display: none;">
                                 <div class="apple-id-banner">
                                     <img id="acc-banner-img" src="" style="display: none;">
@@ -302,7 +299,6 @@
                                         <p id="acc-banner-email">usuario@mail.com</p>
                                     </div>
                                 </div>
-
                                 <div class="ios-acc-list">
                                     <div class="ios-acc-item" onclick="switchAccountSubView('sub-view-personal')">Información personal <span>›</span></div>
                                     <div class="ios-acc-item" onclick="switchAccountSubView('sub-view-erikid')">ErikID <span>›</span></div>
@@ -312,94 +308,19 @@
                                     <div class="ios-acc-item" onclick="switchAccountSubView('sub-view-multidevice')"><i class="ph ph-devices" style="margin-right:6px;"></i> Pestañas de Dispositivos <span>›</span></div>
                                     <div class="ios-acc-item" onclick="switchAccountSubView('sub-view-erikdrop')"><i class="ph ph-share-network" style="margin-right:6px;"></i> ErikDrop (Enviar pestaña) <span>›</span></div>
                                 </div>
-
                                 <div class="ios-acc-list" style="margin-top: 15px;">
                                     <div class="ios-acc-item danger" onclick="logoutPandaAccount()">Cerrar sesión en Panda</div>
                                 </div>
                             </div>
                         </div>
 
-                        <div id="sub-view-personal" class="sub-settings-view">
-                            <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
-                            <h3>Información Personal</h3>
-                            <div class="acc-input-group">
-                                <label>Nombre completo</label>
-                                <input type="text" id="acc-edit-name">
-                            </div>
-                            <div class="acc-input-group">
-                                <label>Correo electrónico</label>
-                                <input type="email" id="acc-edit-email" disabled>
-                            </div>
-                            <button class="auth-btn-action" style="margin-top: 15px;" onclick="saveAccountChanges()">Guardar cambios</button>
-                        </div>
-
-                        <div id="sub-view-erikid" class="sub-settings-view">
-                            <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
-                            <h3>ErikID</h3>
-                            <p style="font-size: 13px; color: #888; margin-bottom: 20px; line-height: 1.4;">ErikID habilita la autenticación unificada en todas las aplicaciones del ecosistema ErikHub.</p>
-                            <div class="setting-item">
-                                <span>Activar ErikID</span>
-                                <label class="switch"><input type="checkbox" id="acc-erikid-toggle"><span class="slider"></span></label>
-                            </div>
-                        </div>
-
-                        <div id="sub-view-security" class="sub-settings-view">
-                            <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
-                            <h3>Seguridad de la Cuenta</h3>
-                            <div class="setting-item">
-                                <span>Verificación en dos pasos (Email OTP)</span>
-                                <label class="switch"><input type="checkbox" id="acc-2fa-toggle"><span class="slider"></span></label>
-                            </div>
-                            <p style="font-size: 12px; color: #888;">Protege tus accesos con códigos temporales enviados a tu correo.</p>
-                        </div>
-
-                        <div id="sub-view-devices" class="sub-settings-view">
-                            <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
-                            <h3>Dispositivos Vinculados</h3>
-                            <div id="acc-devices-list" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
-                                <div class="download-item">
-                                    <p>💻 Este ordenador (Panda Browser)</p>
-                                    <span style="color: var(--accent-color);">Activo ahora</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="sub-view-sync" class="sub-settings-view">
-                            <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
-                            <h3>Sincronización en la Nube</h3>
-                            <p style="font-size: 13px; color: #888; margin-bottom: 20px; line-height: 1.4;">Mantén tus marcadores sincronizados entre todos tus dispositivos usando tu cuenta de ErikAccount.</p>
-                            <div class="setting-item">
-                                <span>Sincronizar marcadores</span>
-                                <label class="switch"><input type="checkbox" id="acc-sync-bookmarks-toggle"><span class="slider"></span></label>
-                            </div>
-                            <button class="auth-btn-action" style="margin-top: 20px;" onclick="forceSyncNow()">Sincronizar ahora</button>
-                        </div>
-
-                        <div id="sub-view-multidevice" class="sub-settings-view">
-                            <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
-                            <h3>Pestañas de otros dispositivos</h3>
-                            <p style="font-size: 13px; color: #888; margin-bottom: 15px;">Pestañas abiertas en tus otros dispositivos con la misma sesión:</p>
-                            <div id="remote-tabs-container" style="display: flex; flex-direction: column; gap: 8px;">
-                                <div style="text-align: center; padding: 20px; color: #888; font-size: 13px;">Buscando pestañas remotas...</div>
-                            </div>
-                        </div>
-
-                        <div id="sub-view-erikdrop" class="sub-settings-view">
-                            <button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button>
-                            <h3>ErikDrop</h3>
-                            <p style="font-size: 13px; color: #888; margin-bottom: 15px; line-height: 1.4;">Envía la página web actual instantáneamente a tus otros dispositivos abiertos.</p>
-                            <div class="acc-input-group">
-                                <label>Página actual</label>
-                                <input type="text" id="erikdrop-current-url" disabled>
-                            </div>
-                            <div style="margin-top: 15px;">
-                                <label style="display:block; font-size: 12px; color: #888; margin-bottom: 6px;">Selecciona dispositivo de destino:</label>
-                                <div id="erikdrop-devices-list" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">
-                                    <div style="font-size: 13px; color: #888; padding: 10px;">Buscando dispositivos cercanos...</div>
-                                </div>
-                            </div>
-                        </div>
-
+                        <div id="sub-view-personal" class="sub-settings-view"><button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button><h3>Información Personal</h3><div class="acc-input-group"><label>Nombre completo</label><input type="text" id="acc-edit-name"></div><div class="acc-input-group"><label>Correo electrónico</label><input type="email" id="acc-edit-email" disabled></div><button class="auth-btn-action" style="margin-top: 15px;" onclick="saveAccountChanges()">Guardar cambios</button></div>
+                        <div id="sub-view-erikid" class="sub-settings-view"><button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button><h3>ErikID</h3><p style="font-size: 13px; color: #888; margin-bottom: 20px;">ErikID habilita la autenticación unificada en todas las aplicaciones del ecosistema ErikHub.</p><div class="setting-item"><span>Activar ErikID</span><label class="switch"><input type="checkbox" id="acc-erikid-toggle"><span class="slider"></span></label></div></div>
+                        <div id="sub-view-security" class="sub-settings-view"><button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button><h3>Seguridad de la Cuenta</h3><div class="setting-item"><span>Verificación en dos pasos (Email OTP)</span><label class="switch"><input type="checkbox" id="acc-2fa-toggle"><span class="slider"></span></label></div><p style="font-size: 12px; color: #888;">Protege tus accesos con códigos temporales enviados a tu correo.</p></div>
+                        <div id="sub-view-devices" class="sub-settings-view"><button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button><h3>Dispositivos Vinculados</h3><div id="acc-devices-list" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;"><div class="download-item"><p>💻 Este ordenador (Panda Browser)</p><span style="color: var(--accent-color);">Activo ahora</span></div></div></div>
+                        <div id="sub-view-sync" class="sub-settings-view"><button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button><h3>Sincronización en la Nube</h3><p style="font-size: 13px; color: #888; margin-bottom: 20px;">Mantén tus marcadores sincronizados entre todos tus dispositivos usando tu cuenta de ErikAccount.</p><div class="setting-item"><span>Sincronizar marcadores</span><label class="switch"><input type="checkbox" id="acc-sync-bookmarks-toggle"><span class="slider"></span></label></div><button class="auth-btn-action" style="margin-top: 20px;" onclick="forceSyncNow()">Sincronizar ahora</button></div>
+                        <div id="sub-view-multidevice" class="sub-settings-view"><button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button><h3>Pestañas de otros dispositivos</h3><div id="remote-tabs-container" style="display: flex; flex-direction: column; gap: 8px;"><div style="text-align: center; padding: 20px; color: #888; font-size: 13px;">Buscando pestañas remotas...</div></div></div>
+                        <div id="sub-view-erikdrop" class="sub-settings-view"><button class="back-sub-btn" onclick="switchAccountSubView('acc-main-view')"><i class="ph ph-arrow-left"></i> Volver a Cuentas</button><h3>ErikDrop</h3><div class="acc-input-group"><label>Página actual</label><input type="text" id="erikdrop-current-url" disabled></div><div style="margin-top: 15px;"><label style="display:block; font-size: 12px; color: #888; margin-bottom: 6px;">Selecciona dispositivo de destino:</label><div id="erikdrop-devices-list" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;"><div style="font-size: 13px; color: #888; padding: 10px;">Buscando dispositivos cercanos...</div></div></div></div>
                     </div>
 
                     <div id="panel-search" class="settings-panel">
@@ -411,7 +332,6 @@
                                 <option value="google">Google</option>
                             </select>
                         </div>
-                        <p style="font-size: 12px; color: #888; margin-top: 10px;">El buscador se usará cuando escribas algo en la barra que no sea una dirección web.</p>
                     </div>
 
                     <div id="panel-bookmarks" class="settings-panel">
@@ -431,7 +351,38 @@
                         <div class="setting-item"><span>Elige el color principal de la interfaz</span><div class="color-picker-container"><input type="color" id="set-accent-color" value="#4CAF50"></div></div>
                     </div>
 
-                    <!-- NUEVO PANEL PANDA 1.0 -->
+                    <div id="panel-extensions" class="settings-panel">
+                        <h3>Gestor de Extensiones</h3>
+                        <p style="font-size: 12px; color: #888; margin-bottom: 20px;">Personaliza Panda con temas, botones y nuevas funciones desarrolladas por la comunidad de ErikHub.</p>
+                        
+                        <div style="margin-bottom: 30px;">
+                            <h4 style="margin: 0 0 10px 0; font-size: 14px;">Extensiones Instaladas</h4>
+                            <div id="installed-extensions-list">
+                                <div style="font-size: 12px; color: #888; padding: 10px; text-align: center; border: 1px dashed var(--glass-border); border-radius: 8px;">No tienes extensiones instaladas.</div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 style="margin: 0 0 10px 0; font-size: 14px;">Tienda Panda</h4>
+                            <div id="store-extensions-list">
+                                <div style="font-size: 12px; color: #888; padding: 10px; text-align: center;">Conectando con la tienda...</div>
+                            </div>
+                            
+                            <!-- NUEVO BOTÓN DE LA TIENDA WEB -->
+                            <button onclick="window.open('https://store.panda.erikhub.com', '_blank')" style="width: 100%; padding: 12px; background: var(--accent-color); color: #000; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; margin-top: 15px; transition: opacity 0.2s;">
+                                🌐 Explorar web de Panda Store
+                            </button>
+                        </div>
+
+                        <button class="ext-dev-btn" onclick="openDevMode()">+ Modo Desarrollador (Cargar JSON Local)</button>
+
+                        <div id="dev-mode-area" style="display: none; margin-top: 15px;">
+                            <textarea id="dev-ext-json" rows="6" placeholder="Pega aquí el código JSON de tu extensión..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-color); font-family: monospace; font-size: 12px; margin-bottom: 10px;"></textarea>
+                            <button class="auth-btn-action" style="margin-top: 0;" onclick="loadLocalExtension()">Instalar y Probar</button>
+                            <div style="font-size: 11px; color: #ff4444; margin-top: 8px;">* Normas: No IA en nav bar. No cuentas externas en ajustes. No anuncios. Ni contenido inapropiado.</div>
+                        </div>
+                    </div>
+
                     <div id="panel-update" class="settings-panel">
                         <div style="text-align: center; padding: 20px 0;">
                             <h1 class="panda-version-title">Panda 1.0</h1>
@@ -448,10 +399,13 @@
                             <p id="update-status" style="font-size: 13px; color: #aaa; margin-top: 15px; font-weight: 500;"></p>
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>
     </div>
+
+    <div id="extensions-panels-wrapper"></div>
 
     <div class="settings-overlay" id="downloads-overlay">
         <div class="settings-modal" style="width: 400px; height: 500px; max-height: 80vh;">
@@ -476,7 +430,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js"; 
+        import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js"; 
 
         const firebaseConfig = {
             apiKey: "AIzaSyBjzjkLikd6cOJKTUaY2NrvDbezUgH8ncI",
@@ -494,6 +448,7 @@
         const rtdb = getDatabase(app); 
 
         window.dbInstance = db;
+        window.rtdbInstance = rtdb;
 
         window.verifyPandaApiKey = async (apiKey, currentDomain) => {
             try {
@@ -534,16 +489,13 @@
                 localStorage.setItem('panda_account', JSON.stringify(window.pandaAccount));
                 window.updateAccountUI();
                 alert("¡Cambios guardados con éxito!");
-            } catch(e) {
-                alert("Error al guardar: " + e.message);
-            }
+            } catch(e) { alert("Error al guardar: " + e.message); }
         };
 
         window.syncBookmarksToCloud = async (bookmarksArray) => {
             if (!window.pandaAccount || !window.pandaAccount.firestoreId) return;
             const syncEnabled = localStorage.getItem('panda_sync_bookmarks') === 'true';
             if (!syncEnabled) return;
-
             try {
                 const userRef = doc(db, "users", window.pandaAccount.firestoreId);
                 await updateDoc(userRef, { pandaBookmarks: bookmarksArray });
@@ -554,7 +506,6 @@
             if (!window.pandaAccount || !window.pandaAccount.firestoreId) return;
             const syncEnabled = localStorage.getItem('panda_sync_bookmarks') === 'true';
             if (!syncEnabled) return;
-
             try {
                 const userDoc = await getDoc(doc(db, "users", window.pandaAccount.firestoreId));
                 if (userDoc.exists()) {
@@ -592,15 +543,10 @@
             if (erikIdToggle) {
                 erikIdToggle.onchange = async (e) => {
                     const isChecked = e.target.checked;
-                    try {
-                        await updateDoc(doc(db, "users", window.pandaAccount.firestoreId), { erikIdEnabled: isChecked });
-                    } catch(err) {
-                        alert("Error al actualizar ErikID: " + err.message);
-                        erikIdToggle.checked = !isChecked;
-                    }
+                    try { await updateDoc(doc(db, "users", window.pandaAccount.firestoreId), { erikIdEnabled: isChecked }); } 
+                    catch(err) { alert("Error al actualizar ErikID: " + err.message); erikIdToggle.checked = !isChecked; }
                 };
             }
-
             if (twoFaToggle) {
                 twoFaToggle.onchange = async (e) => {
                     const isChecked = e.target.checked;
@@ -609,12 +555,8 @@
                         twoFaToggle.checked = false;
                         return;
                     }
-                    try {
-                        await updateDoc(doc(db, "users", window.pandaAccount.firestoreId), { email2fa: isChecked });
-                    } catch(err) {
-                        alert("Error al actualizar 2FA: " + err.message);
-                        twoFaToggle.checked = !isChecked;
-                    }
+                    try { await updateDoc(doc(db, "users", window.pandaAccount.firestoreId), { email2fa: isChecked }); } 
+                    catch(err) { alert("Error al actualizar 2FA: " + err.message); twoFaToggle.checked = !isChecked; }
                 };
             }
         };
@@ -637,10 +579,7 @@
                         otherTabs.forEach(t => {
                             remoteTabsContainer.innerHTML += `
                                 <div class="download-item" style="cursor:pointer;" onclick="loadUrlInActiveTab('${t.url}')">
-                                    <div>
-                                        <p>🌐 ${t.title || t.url}</p>
-                                        <span>Dispositivo: ${t.deviceName || 'Remoto'}</span>
-                                    </div>
+                                    <div><p>🌐 ${t.title || t.url}</p><span>Dispositivo: ${t.deviceName || 'Remoto'}</span></div>
                                     <i class="ph ph-arrow-square-out" style="font-size:18px;"></i>
                                 </div>
                             `;
@@ -684,16 +623,41 @@
             try {
                 const userRef = doc(db, "users", window.pandaAccount.firestoreId);
                 await updateDoc(userRef, {
-                    erikDrop: {
-                        targetDeviceId: targetDevId,
-                        url: currentUrl,
-                        timestamp: Date.now()
-                    }
+                    erikDrop: { targetDeviceId: targetDevId, url: currentUrl, timestamp: Date.now() }
                 });
                 alert("¡Página enviada con éxito por ErikDrop!");
-            } catch(e) {
-                alert("Error al enviar con ErikDrop: " + e.message);
-            }
+            } catch(e) { alert("Error al enviar con ErikDrop: " + e.message); }
+        };
+
+        window.fetchStoreExtensions = () => {
+            const list = document.getElementById('store-extensions-list');
+            const extRef = ref(rtdb, 'panda_extensions');
+            onValue(extRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    list.innerHTML = '';
+                    const exts = snapshot.val();
+                    for (const id in exts) {
+                        const ext = exts[id];
+                        const isInstalled = window.pandaInstalledExtensions.some(e => e.id === id);
+                        list.innerHTML += `
+                            <div class="ext-store-item">
+                                <div class="ext-info">
+                                    <h4>${ext.name} <span class="ext-badge">${ext.type}</span></h4>
+                                    <p>Por ${ext.autor} • Soporta Panda ${ext.pandamin}+</p>
+                                </div>
+                                ${isInstalled ? 
+                                    `<button class="btn-uninstall-ext" onclick="uninstallExtension('${id}')">Desinstalar</button>` : 
+                                    `<button class="btn-install-ext" onclick='installExtensionStore(${JSON.stringify({id, ...ext})})'>Instalar</button>`
+                                }
+                            </div>
+                        `;
+                    }
+                } else {
+                    list.innerHTML = '<div style="font-size: 12px; color: #888; padding: 10px; text-align: center;">No hay extensiones en la tienda todavía.</div>';
+                }
+            }, (error) => {
+                list.innerHTML = '<div style="font-size: 12px; color: #ff4444; padding: 10px; text-align: center;">Error al conectar con la tienda.</div>';
+            });
         };
 
         if (window.pandaAccount) {
@@ -710,10 +674,14 @@
                 }
             });
         }
+        
+        setTimeout(() => window.fetchStoreExtensions(), 1500);
+
     </script>
 
     <script>
-        const PANDA_VERSION = "1.0.13";
+        // ACTUALIZADO A LA VERSIÓN 1.0.15
+        const PANDA_VERSION = "1.0.15";
 
         if (navigator.userAgent.includes('Mac')) {
             document.body.classList.add('is-mac');
@@ -725,8 +693,9 @@
         };
         
         let bookmarks = JSON.parse(localStorage.getItem('panda_bookmarks')) || [{ name: "ErikHub", url: "https://erikhub.com" }];
-        
         window.pandaAccount = JSON.parse(localStorage.getItem('panda_account')) || null;
+        
+        window.pandaInstalledExtensions = JSON.parse(localStorage.getItem('panda_installed_extensions')) || [];
 
         let tabs = [];
         let activeTabId = null;
@@ -753,57 +722,41 @@
                 .then(json => {
                     if (json.version !== PANDA_VERSION) {
                         statusText.innerHTML = `<span style="color: var(--accent-color);">¡Versión ${json.version} detectada! Descargando paquete...</span>`;
-                        
                         return fetch(json.fileUrl + `?t=${Date.now()}`)
                             .then(r => r.text())
                             .then(htmlData => {
                                 const fs = require('fs');
                                 const path = require('path');
                                 const indexPath = path.join(__dirname, 'index.html');
-                                
                                 fs.writeFileSync(indexPath, htmlData, 'utf8');
                                 statusText.innerHTML = `<span style="color: var(--accent-color);">¡Actualización completada! Reiniciando Panda...</span>`;
-                                
-                                setTimeout(() => {
-                                    window.location.reload();
-                                }, 1500);
+                                setTimeout(() => window.location.reload(), 1500);
                             });
-                    } else {
-                        statusText.textContent = "Ya tienes la última versión instalada.";
-                    }
+                    } else { statusText.textContent = "Ya tienes la última versión instalada."; }
                 })
                 .catch(err => {
                     statusText.textContent = "Usando canal seguro Node.js...";
                     try {
                         const https = require('https');
                         https.get(`https://panda.erikhub.com/update/version.json?t=${Date.now()}`, (resp) => {
-                            let data = '';
-                            resp.on('data', chunk => data += chunk);
+                            let data = ''; resp.on('data', chunk => data += chunk);
                             resp.on('end', () => {
                                 const json = JSON.parse(data);
                                 if (json.version !== PANDA_VERSION) {
-                                    statusText.innerHTML = `<span style="color: var(--accent-color);">¡Versión ${json.version} encontrada por Node! Instalando...</span>`;
+                                    statusText.innerHTML = `<span style="color: var(--accent-color);">¡Versión ${json.version} encontrada! Instalando...</span>`;
                                     https.get(json.fileUrl + `?t=${Date.now()}`, (hResp) => {
-                                        let hData = '';
-                                        hResp.on('data', chunk => hData += chunk);
+                                        let hData = ''; hResp.on('data', chunk => hData += chunk);
                                         hResp.on('end', () => {
-                                            const fs = require('fs');
-                                            const path = require('path');
+                                            const fs = require('fs'); const path = require('path');
                                             fs.writeFileSync(path.join(__dirname, 'index.html'), hData, 'utf8');
                                             statusText.innerHTML = `<span style="color: var(--accent-color);">¡Actualizado! Reiniciando...</span>`;
                                             setTimeout(() => window.location.reload(), 1500);
                                         });
                                     });
-                                } else {
-                                    statusText.textContent = "Ya tienes la última versión instalada.";
-                                }
+                                } else { statusText.textContent = "Ya tienes la última versión instalada."; }
                             });
-                        }).on('error', (e2) => {
-                            statusText.innerHTML = `<span style="color: #ff4444;">Error definitivo: ${e2.message}</span>`;
-                        });
-                    } catch(e3) {
-                        statusText.innerHTML = `<span style="color: #ff4444;">Error crítico: ${e3.message}</span>`;
-                    }
+                        }).on('error', (e2) => statusText.innerHTML = `<span style="color: #ff4444;">Error: ${e2.message}</span>`);
+                    } catch(e3) { statusText.innerHTML = `<span style="color: #ff4444;">Error crítico: ${e3.message}</span>`; }
                 });
         });
 
@@ -829,12 +782,7 @@
                                 list.innerHTML = '<div style="font-size:12px; color:#888;">No hay otros dispositivos activos conectados.</div>';
                             } else {
                                 devs.forEach(d => {
-                                    list.innerHTML += `
-                                        <div class="download-item" style="cursor:pointer;" onclick="sendErikDropToDevice('${d.deviceId}')">
-                                            <p>💻 ${d.deviceName || 'Dispositivo Remoto'}</p>
-                                            <span style="color:var(--accent-color);">Enviar aquí</span>
-                                        </div>
-                                    `;
+                                    list.innerHTML += `<div class="download-item" style="cursor:pointer;" onclick="sendErikDropToDevice('${d.deviceId}')"><p>💻 ${d.deviceName || 'Dispositivo Remoto'}</p><span style="color:var(--accent-color);">Enviar aquí</span></div>`;
                                 });
                             }
                         }
@@ -863,31 +811,20 @@
             }
 
             if (window.pandaAccount) {
-                viewOut.style.display = 'none';
-                viewIn.style.display = 'block';
+                viewOut.style.display = 'none'; viewIn.style.display = 'block';
                 bannerName.textContent = window.pandaAccount.name;
                 bannerEmail.textContent = window.pandaAccount.email || 'ErikAccount ID: ' + window.pandaAccount.id;
 
                 if (window.pandaAccount.photo) {
-                    iconDefault.style.display = 'none';
-                    imgPic.style.display = 'block';
-                    imgPic.src = window.pandaAccount.photo;
-
-                    bannerDefault.style.display = 'none';
-                    bannerImg.style.display = 'block';
-                    bannerImg.src = window.pandaAccount.photo;
+                    iconDefault.style.display = 'none'; imgPic.style.display = 'block'; imgPic.src = window.pandaAccount.photo;
+                    bannerDefault.style.display = 'none'; bannerImg.style.display = 'block'; bannerImg.src = window.pandaAccount.photo;
                 } else {
-                    iconDefault.style.display = 'block';
-                    imgPic.style.display = 'none';
-
-                    bannerDefault.style.display = 'flex';
-                    bannerImg.style.display = 'none';
+                    iconDefault.style.display = 'block'; imgPic.style.display = 'none';
+                    bannerDefault.style.display = 'flex'; bannerImg.style.display = 'none';
                 }
             } else {
-                viewOut.style.display = 'block';
-                viewIn.style.display = 'none';
-                iconDefault.style.display = 'block';
-                imgPic.style.display = 'none';
+                viewOut.style.display = 'block'; viewIn.style.display = 'none';
+                iconDefault.style.display = 'block'; imgPic.style.display = 'none';
             }
         };
 
@@ -914,108 +851,52 @@
 
         window.logoutPandaAccount = () => {
             if(confirm('¿Seguro que quieres desconectar tu cuenta de este navegador?')) {
-                window.pandaAccount = null;
-                localStorage.removeItem('panda_account');
-                switchAccountSubView('acc-main-view');
-                updateAccountUI();
+                window.pandaAccount = null; localStorage.removeItem('panda_account');
+                switchAccountSubView('acc-main-view'); updateAccountUI();
             }
         };
 
-        document.getElementById('btn-login-erik').addEventListener('click', () => {
-            createNewTab('https://account.erikhub.com/?from=Panda');
-            document.getElementById('settings-overlay').style.display = 'none';
-        });
-
-        document.getElementById('btn-profile').addEventListener('click', () => {
-            document.getElementById('settings-overlay').style.display = 'flex';
-            document.querySelector('.settings-tab-btn[data-target="panel-accounts"]').click();
-            switchAccountSubView('acc-main-view');
-        });
-
+        document.getElementById('btn-login-erik').addEventListener('click', () => { createNewTab('https://account.erikhub.com/?from=Panda'); document.getElementById('settings-overlay').style.display = 'none'; });
+        document.getElementById('btn-profile').addEventListener('click', () => { document.getElementById('settings-overlay').style.display = 'flex'; document.querySelector('.settings-tab-btn[data-target="panel-accounts"]').click(); switchAccountSubView('acc-main-view'); });
         document.getElementById('btn-erikdrop-bar').addEventListener('click', () => {
-            if (!window.pandaAccount) {
-                alert("Inicia sesión con ErikAccount para usar ErikDrop.");
-                document.getElementById('settings-overlay').style.display = 'flex';
-                document.querySelector('.settings-tab-btn[data-target="panel-accounts"]').click();
-                switchAccountSubView('acc-main-view');
-                return;
-            }
-            document.getElementById('settings-overlay').style.display = 'flex';
-            document.querySelector('.settings-tab-btn[data-target="panel-accounts"]').click();
-            switchAccountSubView('sub-view-erikdrop');
+            if (!window.pandaAccount) { alert("Inicia sesión con ErikAccount para usar ErikDrop."); document.getElementById('settings-overlay').style.display = 'flex'; document.querySelector('.settings-tab-btn[data-target="panel-accounts"]').click(); switchAccountSubView('acc-main-view'); return; }
+            document.getElementById('settings-overlay').style.display = 'flex'; document.querySelector('.settings-tab-btn[data-target="panel-accounts"]').click(); switchAccountSubView('sub-view-erikdrop');
         });
 
         const erikSecureDomains = ['ai.erikhub.com', 'erikhub.com', 'eriksearch.vercel.app', 'account.erikhub.com', 'api.panda.erikhub.com'];
 
         async function checkSecureLock(url, tabIdToCheck) {
-            if (activeTabId === tabIdToCheck) {
-                navLockIcon.classList.remove('lock-secure', 'ph-fill');
-                navLockIcon.classList.add('ph');
-            }
-
+            if (activeTabId === tabIdToCheck) { navLockIcon.classList.remove('lock-secure', 'ph-fill'); navLockIcon.classList.add('ph'); }
             try {
-                const urlObj = new URL(url);
-                const domain = urlObj.hostname.replace(/^www\./, '');
-                const origin = urlObj.origin;
-
+                const urlObj = new URL(url); const domain = urlObj.hostname.replace(/^www\./, ''); const origin = urlObj.origin;
                 if (erikSecureDomains.includes(domain)) {
-                    if (activeTabId === tabIdToCheck) {
-                        navLockIcon.classList.add('lock-secure', 'ph-fill');
-                        navLockIcon.classList.remove('ph');
-                    }
+                    if (activeTabId === tabIdToCheck) { navLockIcon.classList.add('lock-secure', 'ph-fill'); navLockIcon.classList.remove('ph'); }
                     return;
                 }
-
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 3500); 
-                
+                const controller = new AbortController(); const timeoutId = setTimeout(() => controller.abort(), 3500); 
                 const response = await fetch(`${origin}/panda.json`, { signal: controller.signal }).catch(() => null);
                 clearTimeout(timeoutId);
-
                 if (response && response.ok) {
                     const data = await response.json().catch(() => null);
-                    if (data && data.api) {
-                        if (window.verifyPandaApiKey) {
-                            const isValid = await window.verifyPandaApiKey(data.api, domain);
-                            if (isValid && activeTabId === tabIdToCheck) {
-                                navLockIcon.classList.add('lock-secure', 'ph-fill');
-                                navLockIcon.classList.remove('ph');
-                            }
-                        }
+                    if (data && data.api && window.verifyPandaApiKey) {
+                        const isValid = await window.verifyPandaApiKey(data.api, domain);
+                        if (isValid && activeTabId === tabIdToCheck) { navLockIcon.classList.add('lock-secure', 'ph-fill'); navLockIcon.classList.remove('ph'); }
                     }
                 }
-            } catch (e) {
-            }
+            } catch (e) { }
         }
 
-        function getHomeUrl() {
-            if (settings.searchEngine === 'google') return 'https://www.google.com/';
-            return 'https://eriksearch.vercel.app/';
-        }
-
+        function getHomeUrl() { return settings.searchEngine === 'google' ? 'https://www.google.com/' : 'https://eriksearch.vercel.app/'; }
         function getFavicon(url) {
             if (url.includes('eriksearch.vercel.app')) return 'https://panda.erikhub.com/source/logo.png';
             if (url.includes('google.com')) return 'https://www.google.com/favicon.ico';
-            try {
-                const domain = new URL(url).hostname;
-                return `https://s2.googleusercontent.com/s2/favicons?domain=${domain}&sz=32`;
-            } catch (e) {
-                return 'https://panda.erikhub.com/source/logo.png';
-            }
+            try { return `https://s2.googleusercontent.com/s2/favicons?domain=${new URL(url).hostname}&sz=32`; } catch (e) { return 'https://panda.erikhub.com/source/logo.png'; }
         }
-
-        function updateAddressBar(url) {
-            if (url.includes('eriksearch.vercel.app') || url.includes('google.com/webhp') || url === 'https://www.google.com/') {
-                urlInput.value = ''; 
-            } else {
-                urlInput.value = url;
-            }
-        }
-
+        function updateAddressBar(url) { urlInput.value = (url.includes('eriksearch.vercel.app') || url.includes('google.com/webhp') || url === 'https://www.google.com/') ? '' : url; }
         function getTabTitle(url) {
             if (url.includes('eriksearch.vercel.app')) return 'ErikSearch';
             if (url.includes('google.com')) return 'Google';
-            try { return new URL(url).hostname.replace('www.', ''); } catch { return 'Nueva Pestaña'; }
+            try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return 'Nueva Pestaña'; }
         }
 
         function createNewTab(url = getHomeUrl(), isBackground = false) {
@@ -1024,40 +905,21 @@
             tabs.push(tabData);
 
             const tabUI = document.createElement('div');
-            tabUI.className = 'tab';
-            tabUI.id = 'ui-' + id;
-            tabUI.innerHTML = `
-                <img src="${getFavicon(url)}" class="tab-favicon">
-                <span class="tab-title">Cargando...</span>
-                <i class="ph ph-x tab-close"></i>
-            `;
+            tabUI.className = 'tab'; tabUI.id = 'ui-' + id;
+            tabUI.innerHTML = `<img src="${getFavicon(url)}" class="tab-favicon"><span class="tab-title">Cargando...</span><i class="ph ph-x tab-close"></i>`;
             
             tabUI.draggable = true;
-            tabUI.addEventListener('dragstart', (e) => {
-                e.dataTransfer.setData('text/plain', id);
-                setTimeout(() => tabUI.style.opacity = '0.5', 0);
-            });
-            tabUI.addEventListener('dragend', () => {
-                tabUI.style.opacity = tabUI.classList.contains('active') ? '1' : '0.6';
-            });
+            tabUI.addEventListener('dragstart', (e) => { e.dataTransfer.setData('text/plain', id); setTimeout(() => tabUI.style.opacity = '0.5', 0); });
+            tabUI.addEventListener('dragend', () => { tabUI.style.opacity = tabUI.classList.contains('active') ? '1' : '0.6'; });
             tabUI.addEventListener('dragover', (e) => { e.preventDefault(); });
             tabUI.addEventListener('drop', (e) => {
-                e.preventDefault();
-                const draggedId = e.dataTransfer.getData('text/plain');
+                e.preventDefault(); const draggedId = e.dataTransfer.getData('text/plain');
                 if (draggedId && draggedId !== id) {
-                    const draggedEl = document.getElementById('ui-' + draggedId);
-                    const targetEl = document.getElementById('ui-' + id);
-                    
-                    const draggedIndex = tabs.findIndex(t => t.id === draggedId);
-                    const targetIndex = tabs.findIndex(t => t.id === id);
-                    const [draggedTab] = tabs.splice(draggedIndex, 1);
-                    tabs.splice(targetIndex, 0, draggedTab);
-
-                    if (draggedIndex < targetIndex) {
-                        targetEl.parentNode.insertBefore(draggedEl, targetEl.nextSibling);
-                    } else {
-                        targetEl.parentNode.insertBefore(draggedEl, targetEl);
-                    }
+                    const draggedEl = document.getElementById('ui-' + draggedId); const targetEl = document.getElementById('ui-' + id);
+                    const draggedIndex = tabs.findIndex(t => t.id === draggedId); const targetIndex = tabs.findIndex(t => t.id === id);
+                    const [draggedTab] = tabs.splice(draggedIndex, 1); tabs.splice(targetIndex, 0, draggedTab);
+                    if (draggedIndex < targetIndex) targetEl.parentNode.insertBefore(draggedEl, targetEl.nextSibling);
+                    else targetEl.parentNode.insertBefore(draggedEl, targetEl);
                 }
             });
 
@@ -1066,8 +928,7 @@
             tabsList.appendChild(tabUI);
 
             const viewUI = document.createElement('div');
-            viewUI.className = 'web-view';
-            viewUI.id = 'view-' + id;
+            viewUI.className = 'web-view'; viewUI.id = 'view-' + id;
             viewUI.innerHTML = `<webview src="${url}" allowpopups style="width: 100%; height: 100%; border: none; flex: 1; display: flex; background-color: #fff;"></webview>`;
             viewsContainer.appendChild(viewUI);
 
@@ -1076,17 +937,10 @@
                 webviewElement.addEventListener('did-navigate', (e) => {
                     if (e.url.startsWith('https://panda.erikhub.com/callback')) {
                         const urlObj = new URL(e.url);
-                        const userId = urlObj.searchParams.get('id');
-                        const userName = urlObj.searchParams.get('name');
-                        const userEmail = urlObj.searchParams.get('email');
-                        const userVerified = urlObj.searchParams.get('verified');
-                        
-                        if (userId) {
-                            window.loginPandaAccount(userId, userName, userEmail, userVerified);
-                            closeTab(id);
-                            document.getElementById('settings-overlay').style.display = 'flex';
-                            document.querySelector('.settings-tab-btn[data-target="panel-accounts"]').click();
-                            switchAccountSubView('acc-main-view');
+                        if (urlObj.searchParams.get('id')) {
+                            window.loginPandaAccount(urlObj.searchParams.get('id'), urlObj.searchParams.get('name'), urlObj.searchParams.get('email'), urlObj.searchParams.get('verified'));
+                            closeTab(id); document.getElementById('settings-overlay').style.display = 'flex';
+                            document.querySelector('.settings-tab-btn[data-target="panel-accounts"]').click(); switchAccountSubView('acc-main-view');
                             return;
                         }
                     }
@@ -1096,13 +950,9 @@
                         currentTab.url = e.url;
                         if(currentTab.history[currentTab.currentIndex] !== e.url) {
                             currentTab.history = currentTab.history.slice(0, currentTab.currentIndex + 1);
-                            currentTab.history.push(e.url);
-                            currentTab.currentIndex++;
+                            currentTab.history.push(e.url); currentTab.currentIndex++;
                         }
-                        if(activeTabId === id) {
-                            updateTabUIAfterNavigation(currentTab);
-                            if (window.publishActiveTabToCloud) window.publishActiveTabToCloud(getTabTitle(e.url), e.url);
-                        }
+                        if(activeTabId === id) { updateTabUIAfterNavigation(currentTab); if (window.publishActiveTabToCloud) window.publishActiveTabToCloud(getTabTitle(e.url), e.url); }
                     }
                 });
             }
@@ -1113,24 +963,16 @@
 
         function switchTab(id) {
             if (activeTabId) {
-                const oldUi = document.getElementById('ui-' + activeTabId);
-                const oldView = document.getElementById('view-' + activeTabId);
-                if(oldUi) oldUi.classList.remove('active');
-                if(oldView) oldView.classList.remove('active');
+                const oldUi = document.getElementById('ui-' + activeTabId); const oldView = document.getElementById('view-' + activeTabId);
+                if(oldUi) oldUi.classList.remove('active'); if(oldView) oldView.classList.remove('active');
             }
-
-            activeTabId = id;
-            window.activeTabId = activeTabId;
+            activeTabId = id; window.activeTabId = activeTabId;
             const currentTab = tabs.find(t => t.id === id);
 
             document.getElementById('ui-' + id).classList.add('active');
             document.getElementById('view-' + id).classList.add('active');
 
-            updateAddressBar(currentTab.url);
-            updateNavButtons(currentTab);
-            checkIfCurrentIsBookmarked(currentTab.url);
-            checkSecureLock(currentTab.url, id);
-
+            updateAddressBar(currentTab.url); updateNavButtons(currentTab); checkIfCurrentIsBookmarked(currentTab.url); checkSecureLock(currentTab.url, id);
             if (window.publishActiveTabToCloud) window.publishActiveTabToCloud(getTabTitle(currentTab.url), currentTab.url);
         }
 
@@ -1138,92 +980,51 @@
             if (tabs.length === 1) return;
             const index = tabs.findIndex(t => t.id === id);
             tabs.splice(index, 1);
-            document.getElementById('ui-' + id).remove();
-            document.getElementById('view-' + id).remove();
-
-            if (activeTabId === id) {
-                const newActive = tabs[index - 1] || tabs[0];
-                switchTab(newActive.id);
-            }
+            document.getElementById('ui-' + id).remove(); document.getElementById('view-' + id).remove();
+            if (activeTabId === id) { const newActive = tabs[index - 1] || tabs[0]; switchTab(newActive.id); }
         }
 
         window.loadUrlInActiveTab = function(url) {
-            const tab = tabs.find(t => t.id === activeTabId);
-            if (!tab) return;
-            tab.history = tab.history.slice(0, tab.currentIndex + 1);
-            tab.history.push(url);
-            tab.currentIndex++;
-            tab.url = url;
+            const tab = tabs.find(t => t.id === activeTabId); if (!tab) return;
+            tab.history = tab.history.slice(0, tab.currentIndex + 1); tab.history.push(url); tab.currentIndex++; tab.url = url;
 
-            const view = document.getElementById('view-' + activeTabId);
-            view.classList.add('loading');
-            
-            const webview = view.querySelector('webview');
-            if (webview) webview.src = url;
+            const view = document.getElementById('view-' + activeTabId); view.classList.add('loading');
+            const webview = view.querySelector('webview'); if (webview) webview.src = url;
 
             setTimeout(() => {
-                view.classList.remove('loading');
-                const ui = document.getElementById('ui-' + activeTabId);
-                if(ui) {
-                    ui.querySelector('.tab-title').textContent = getTabTitle(url);
-                    ui.querySelector('.tab-favicon').src = getFavicon(url);
-                }
+                view.classList.remove('loading'); const ui = document.getElementById('ui-' + activeTabId);
+                if(ui) { ui.querySelector('.tab-title').textContent = getTabTitle(url); ui.querySelector('.tab-favicon').src = getFavicon(url); }
             }, 300);
 
-            updateAddressBar(url);
-            updateNavButtons(tab);
-            checkIfCurrentIsBookmarked(url);
-            checkSecureLock(url, activeTabId);
-
+            updateAddressBar(url); updateNavButtons(tab); checkIfCurrentIsBookmarked(url); checkSecureLock(url, activeTabId);
             if (window.publishActiveTabToCloud) window.publishActiveTabToCloud(getTabTitle(url), url);
         }
 
-        function updateNavButtons(tab) {
-            btnBack.disabled = tab.currentIndex === 0;
-            btnForward.disabled = tab.currentIndex === tab.history.length - 1;
-        }
-
+        function updateNavButtons(tab) { btnBack.disabled = tab.currentIndex === 0; btnForward.disabled = tab.currentIndex === tab.history.length - 1; }
         document.getElementById('btn-new-tab').addEventListener('click', () => createNewTab());
 
         urlInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
-                let query = urlInput.value.trim();
-                if (!query) return;
+                let query = urlInput.value.trim(); if (!query) return;
                 let finalUrl = "";
-                
-                if (query.includes('.') && !query.includes(' ')) {
-                    finalUrl = (!query.startsWith('http://') && !query.startsWith('https://')) ? 'https://' + query : query;
-                } else {
-                    if (settings.searchEngine === 'google') {
-                        finalUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-                    } else {
-                        finalUrl = `https://eriksearch.vercel.app/?q=${encodeURIComponent(query)}`;
-                    }
-                }
-                loadUrlInActiveTab(finalUrl);
-                urlInput.blur();
+                if (query.includes('.') && !query.includes(' ')) { finalUrl = (!query.startsWith('http://') && !query.startsWith('https://')) ? 'https://' + query : query; } 
+                else { finalUrl = settings.searchEngine === 'google' ? `https://www.google.com/search?q=${encodeURIComponent(query)}` : `https://eriksearch.vercel.app/?q=${encodeURIComponent(query)}`; }
+                loadUrlInActiveTab(finalUrl); urlInput.blur();
             }
         });
 
         function updateTabUIAfterNavigation(tab) {
-            const ui = document.getElementById('ui-' + activeTabId);
-            if (!ui) return;
-            ui.querySelector('.tab-title').textContent = getTabTitle(tab.url);
-            ui.querySelector('.tab-favicon').src = getFavicon(tab.url);
-            updateAddressBar(tab.url);
-            updateNavButtons(tab);
-            checkIfCurrentIsBookmarked(tab.url);
-            checkSecureLock(tab.url, tab.id);
+            const ui = document.getElementById('ui-' + activeTabId); if (!ui) return;
+            ui.querySelector('.tab-title').textContent = getTabTitle(tab.url); ui.querySelector('.tab-favicon').src = getFavicon(tab.url);
+            updateAddressBar(tab.url); updateNavButtons(tab); checkIfCurrentIsBookmarked(tab.url); checkSecureLock(tab.url, tab.id);
         }
 
         btnBack.addEventListener('click', () => {
             const tab = tabs.find(t => t.id === activeTabId);
             if (tab.currentIndex > 0) {
                 btnBack.classList.add('btn-click'); setTimeout(() => btnBack.classList.remove('btn-click'), 150);
-                tab.currentIndex--;
-                tab.url = tab.history[tab.currentIndex];
-                const webview = document.getElementById('view-' + activeTabId).querySelector('webview');
-                if (webview) webview.src = tab.url;
+                tab.currentIndex--; tab.url = tab.history[tab.currentIndex];
+                const webview = document.getElementById('view-' + activeTabId).querySelector('webview'); if (webview) webview.src = tab.url;
                 updateTabUIAfterNavigation(tab);
             }
         });
@@ -1232,10 +1033,8 @@
             const tab = tabs.find(t => t.id === activeTabId);
             if (tab.currentIndex < tab.history.length - 1) {
                 btnForward.classList.add('btn-click'); setTimeout(() => btnForward.classList.remove('btn-click'), 150);
-                tab.currentIndex++;
-                tab.url = tab.history[tab.currentIndex];
-                const webview = document.getElementById('view-' + activeTabId).querySelector('webview');
-                if (webview) webview.src = tab.url;
+                tab.currentIndex++; tab.url = tab.history[tab.currentIndex];
+                const webview = document.getElementById('view-' + activeTabId).querySelector('webview'); if (webview) webview.src = tab.url;
                 updateTabUIAfterNavigation(tab);
             }
         });
@@ -1243,8 +1042,7 @@
         document.getElementById('btn-reload').addEventListener('click', () => {
             const btnReload = document.getElementById('btn-reload');
             btnReload.classList.add('btn-spin'); setTimeout(() => btnReload.classList.remove('btn-spin'), 500);
-            const webview = document.getElementById('view-' + activeTabId).querySelector('webview');
-            if (webview) webview.reload();
+            const webview = document.getElementById('view-' + activeTabId).querySelector('webview'); if (webview) webview.reload();
         });
 
         const rootStyle = document.documentElement.style;
@@ -1253,38 +1051,24 @@
 
         function applySettings() {
             if (settings.theme === 'light') {
-                htmlElement.classList.add('light-theme'); bodyElement.classList.add('light-theme');
-                htmlElement.classList.remove('dark-theme'); bodyElement.classList.remove('dark-theme');
-                document.getElementById('theme-light').classList.add('active');
-                document.getElementById('theme-dark').classList.remove('active');
+                htmlElement.classList.add('light-theme'); bodyElement.classList.add('light-theme'); htmlElement.classList.remove('dark-theme'); bodyElement.classList.remove('dark-theme');
+                document.getElementById('theme-light').classList.add('active'); document.getElementById('theme-dark').classList.remove('active');
             } else {
-                htmlElement.classList.remove('light-theme'); bodyElement.classList.remove('light-theme');
-                htmlElement.classList.add('dark-theme'); bodyElement.classList.add('dark-theme');
-                document.getElementById('theme-dark').classList.add('active');
-                document.getElementById('theme-light').classList.remove('active');
+                htmlElement.classList.remove('light-theme'); bodyElement.classList.remove('light-theme'); htmlElement.classList.add('dark-theme'); bodyElement.classList.add('dark-theme');
+                document.getElementById('theme-dark').classList.add('active'); document.getElementById('theme-light').classList.remove('active');
             }
 
-            rootStyle.setProperty('--accent-color', settings.accentColor);
-            document.getElementById('set-accent-color').value = settings.accentColor;
+            rootStyle.setProperty('--accent-color', settings.accentColor); document.getElementById('set-accent-color').value = settings.accentColor;
+            document.getElementById('set-search-engine').value = settings.searchEngine; document.getElementById('set-enable-bookmarks').checked = settings.bookmarksEnabled;
+            document.getElementById('set-show-bar').checked = settings.showBookmarksBar; document.getElementById('set-shortcut').checked = settings.shortcutAdded;
 
-            document.getElementById('set-search-engine').value = settings.searchEngine;
-            document.getElementById('set-enable-bookmarks').checked = settings.bookmarksEnabled;
-            document.getElementById('set-show-bar').checked = settings.showBookmarksBar;
-            document.getElementById('set-shortcut').checked = settings.shortcutAdded;
-
-            const bookmarksBar = document.getElementById('bookmarks-bar');
-            const btnShortcut = document.getElementById('btn-shortcut-bookmarks');
-
+            const bookmarksBar = document.getElementById('bookmarks-bar'); const btnShortcut = document.getElementById('btn-shortcut-bookmarks');
             if (settings.bookmarksEnabled) {
-                btnStar.style.display = 'block';
-                bookmarksBar.style.display = settings.showBookmarksBar ? 'flex' : 'none';
-                btnShortcut.style.display = settings.shortcutAdded ? 'flex' : 'none';
-            } else {
-                btnStar.style.display = 'none';
-                bookmarksBar.style.display = 'none';
-                btnShortcut.style.display = 'none';
-            }
+                btnStar.style.display = 'block'; bookmarksBar.style.display = settings.showBookmarksBar ? 'flex' : 'none'; btnShortcut.style.display = settings.shortcutAdded ? 'flex' : 'none';
+            } else { btnStar.style.display = 'none'; bookmarksBar.style.display = 'none'; btnShortcut.style.display = 'none'; }
+            
             renderBookmarks();
+            applyInstalledExtensions(); 
         }
 
         function saveSettings() { localStorage.setItem('panda_settings', JSON.stringify(settings)); applySettings(); }
@@ -1295,9 +1079,7 @@
                 document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
                 btn.classList.add('active');
                 document.getElementById(btn.dataset.target).classList.add('active');
-                if (btn.dataset.target === 'panel-accounts') {
-                    switchAccountSubView('acc-main-view');
-                }
+                if (btn.dataset.target === 'panel-accounts') switchAccountSubView('acc-main-view');
             });
         });
 
@@ -1320,78 +1102,45 @@
         downloadsOverlay.addEventListener('click', (e) => { if(e.target === downloadsOverlay) downloadsOverlay.style.display = 'none'; });
 
         window.renderBookmarks = function() {
-            const bar = document.getElementById('bookmarks-bar');
-            bar.innerHTML = '';
+            const bar = document.getElementById('bookmarks-bar'); bar.innerHTML = '';
             bookmarks.forEach((bm) => {
-                const a = document.createElement('a');
-                a.className = 'bookmark-item';
-                a.innerHTML = `<img src="${getFavicon(bm.url)}" style="width:14px; height:14px; border-radius:3px; object-fit:contain;"> ${bm.name}`;
-                
+                const a = document.createElement('a'); a.className = 'bookmark-item'; a.innerHTML = `<img src="${getFavicon(bm.url)}" style="width:14px; height:14px; border-radius:3px; object-fit:contain;"> ${bm.name}`;
                 a.onclick = () => loadUrlInActiveTab(bm.url);
-                
                 a.addEventListener('contextmenu', (e) => {
                     e.preventDefault();
                     if(confirm(`¿Quieres eliminar el marcador "${bm.name}"?`)) {
-                        bookmarks = bookmarks.filter(b => b.url !== bm.url);
-                        localStorage.setItem('panda_bookmarks', JSON.stringify(bookmarks));
-                        renderBookmarks();
+                        bookmarks = bookmarks.filter(b => b.url !== bm.url); localStorage.setItem('panda_bookmarks', JSON.stringify(bookmarks)); renderBookmarks();
                         if (window.syncBookmarksToCloud) window.syncBookmarksToCloud(bookmarks);
                     }
                 });
                 bar.appendChild(a);
             });
-            if(activeTabId) {
-                const tab = tabs.find(t => t.id === activeTabId);
-                if(tab) checkIfCurrentIsBookmarked(tab.url);
-            }
+            if(activeTabId) { const tab = tabs.find(t => t.id === activeTabId); if(tab) checkIfCurrentIsBookmarked(tab.url); }
         }
 
         function checkIfCurrentIsBookmarked(url) {
             const isBookmarked = bookmarks.some(bm => bm.url === url);
-            if (isBookmarked) {
-                btnStar.innerHTML = '<i class="ph-fill ph-star"></i>';
-                btnStar.classList.add('saved');
-            } else {
-                btnStar.innerHTML = '<i class="ph ph-star"></i>';
-                btnStar.classList.remove('saved');
-            }
+            if (isBookmarked) { btnStar.innerHTML = '<i class="ph-fill ph-star"></i>'; btnStar.classList.add('saved'); } 
+            else { btnStar.innerHTML = '<i class="ph ph-star"></i>'; btnStar.classList.remove('saved'); }
         }
 
         btnStar.addEventListener('click', () => {
-            const tab = tabs.find(t => t.id === activeTabId);
-            if (!tab) return;
-            const currentUrl = tab.url;
-
-            const existingIndex = bookmarks.findIndex(bm => bm.url === currentUrl);
-            if (existingIndex >= 0) {
-                bookmarks.splice(existingIndex, 1);
-            } else {
+            const tab = tabs.find(t => t.id === activeTabId); if (!tab) return;
+            const currentUrl = tab.url; const existingIndex = bookmarks.findIndex(bm => bm.url === currentUrl);
+            if (existingIndex >= 0) { bookmarks.splice(existingIndex, 1); } 
+            else {
                 const name = prompt("Nombre del marcador:", getTabTitle(currentUrl));
-                if (name !== null && name.trim() !== "") {
-                    bookmarks.push({ name: name.trim(), url: currentUrl });
-                } else {
-                    return;
-                }
+                if (name !== null && name.trim() !== "") bookmarks.push({ name: name.trim(), url: currentUrl }); else return;
             }
-            
-            localStorage.setItem('panda_bookmarks', JSON.stringify(bookmarks));
-            checkIfCurrentIsBookmarked(currentUrl); 
-            renderBookmarks();
-
+            localStorage.setItem('panda_bookmarks', JSON.stringify(bookmarks)); checkIfCurrentIsBookmarked(currentUrl); renderBookmarks();
             if (window.syncBookmarksToCloud) window.syncBookmarksToCloud(bookmarks);
-
             const bookmarksBar = document.getElementById('bookmarks-bar');
-            if (settings.bookmarksEnabled && settings.showBookmarksBar) {
-                bookmarksBar.style.display = 'flex';
-            }
+            if (settings.bookmarksEnabled && settings.showBookmarksBar) bookmarksBar.style.display = 'flex';
         });
 
         document.getElementById('btn-shortcut-bookmarks').addEventListener('click', () => {
             const bar = document.getElementById('bookmarks-bar');
-            if(bar.style.display === 'none') {
-                bar.style.display = 'flex';
-                setTimeout(() => { if(!settings.showBookmarksBar) bar.style.display = 'none'; }, 4000);
-            }
+            if(bar.style.display === 'none') { bar.style.display = 'flex'; setTimeout(() => { if(!settings.showBookmarksBar) bar.style.display = 'none'; }, 4000); }
         });
 
         const aiSidebar = document.getElementById('ai-sidebar');
@@ -1399,9 +1148,218 @@
         document.getElementById('toggle-ai').addEventListener('click', toggleSidebar);
         document.getElementById('close-ai').addEventListener('click', toggleSidebar);
 
+        window.openDevMode = () => {
+            const div = document.getElementById('dev-mode-area');
+            div.style.display = div.style.display === 'none' ? 'block' : 'none';
+        };
+
+        window.loadLocalExtension = () => {
+            try {
+                const rawJson = document.getElementById('dev-ext-json').value;
+                const cleanJson = rawJson.replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:/g, '"$2": '); 
+                const ext = JSON.parse(cleanJson);
+                
+                if (!ext.name || !ext.type) throw new Error("Falta nombre o tipo de extensión.");
+                
+                const id = 'dev_' + Date.now();
+                installExtensionStore({ id, ...ext });
+                document.getElementById('dev-ext-json').value = '';
+                alert("Extensión local instalada con éxito para pruebas.");
+            } catch (e) {
+                alert("Error en el formato JSON: " + e.message);
+            }
+        };
+
+        window.installExtensionStore = (extData) => {
+            const exists = window.pandaInstalledExtensions.find(e => e.id === extData.id);
+            if (!exists) {
+                window.pandaInstalledExtensions.push(extData);
+                localStorage.setItem('panda_installed_extensions', JSON.stringify(window.pandaInstalledExtensions));
+                renderInstalledExtensions();
+                applyInstalledExtensions();
+                if(window.fetchStoreExtensions) window.fetchStoreExtensions(); 
+            }
+        };
+
+        window.uninstallExtension = (extId) => {
+            if(confirm("¿Desinstalar esta extensión?")) {
+                window.pandaInstalledExtensions = window.pandaInstalledExtensions.filter(e => e.id !== extId);
+                localStorage.setItem('panda_installed_extensions', JSON.stringify(window.pandaInstalledExtensions));
+                
+                document.querySelectorAll('.ext-injected').forEach(el => el.remove());
+                document.body.classList.remove('has-ext-theme');
+                
+                renderInstalledExtensions();
+                applyInstalledExtensions(); 
+                if(window.fetchStoreExtensions) window.fetchStoreExtensions();
+            }
+        };
+
+        window.renderInstalledExtensions = () => {
+            const list = document.getElementById('installed-extensions-list');
+            list.innerHTML = '';
+            if (window.pandaInstalledExtensions.length === 0) {
+                list.innerHTML = '<div style="font-size: 12px; color: #888; padding: 10px; text-align: center; border: 1px dashed var(--glass-border); border-radius: 8px;">No tienes extensiones instaladas.</div>';
+                return;
+            }
+
+            window.pandaInstalledExtensions.forEach(ext => {
+                list.innerHTML += `
+                    <div class="ext-store-item">
+                        <div class="ext-info">
+                            <h4>${ext.name} <span class="ext-badge">${ext.type}</span></h4>
+                            <p>Por ${ext.autor || 'Desconocido'}</p>
+                        </div>
+                        <button class="btn-uninstall-ext" onclick="uninstallExtension('${ext.id}')">Desinstalar</button>
+                    </div>
+                `;
+            });
+        };
+
+        window.applyInstalledExtensions = () => {
+            document.querySelectorAll('.ext-injected').forEach(el => el.remove());
+            document.body.classList.remove('has-ext-theme');
+            
+            const navContainer = document.getElementById('nav-extensions-container');
+            const sidebarsWrapper = document.getElementById('extensions-sidebars-wrapper');
+            const settingsTabs = document.getElementById('settings-sidebar-tabs');
+            const settingsPanels = document.getElementById('extensions-panels-wrapper');
+
+            window.pandaInstalledExtensions.forEach(ext => {
+                const permisos = ext.permisos || [];
+                
+                if (ext.type === 'tema' || permisos.includes('tema')) {
+                    if (ext.color1nav && ext.color2nav) {
+                        document.body.classList.add('has-ext-theme');
+                        rootStyle.setProperty('--ext-color1', ext.color1nav);
+                        rootStyle.setProperty('--ext-color2', ext.color2nav);
+                    }
+                }
+
+                if (ext.type === 'button' || permisos.includes('nav bar')) {
+                    const btn = document.createElement('button');
+                    btn.className = 'icon-btn ext-injected';
+                    btn.title = ext.name;
+                    btn.innerHTML = `<i class="ph ph-puzzle-piece"></i>`; 
+
+                    if (ext.inopen === 'menu') {
+                        const sidebarId = 'sidebar-ext-' + ext.id;
+                        const sidebarHTML = `
+                            <div class="sidebar-container ext-injected" id="${sidebarId}">
+                                <div class="sidebar-header">
+                                    <div class="sidebar-brand"><span>${ext.name}</span></div>
+                                    <button class="icon-btn close-ext-sidebar" data-target="${sidebarId}" style="width: 28px; height: 28px;"><i class="ph ph-x"></i></button>
+                                </div>
+                                <webview src="${ext.html || 'about:blank'}" allowpopups style="width: 100%; height: 100%; display: flex; border: none; flex: 1;"></webview>
+                            </div>
+                        `;
+                        sidebarsWrapper.insertAdjacentHTML('beforeend', sidebarHTML);
+                        
+                        btn.onclick = () => {
+                            const sb = document.getElementById(sidebarId);
+                            sb.style.display = sb.style.display === 'flex' ? 'none' : 'flex';
+                        };
+                    } else if (ext.inopen === 'fullscreen' || ext.pestaña) {
+                        btn.onclick = () => {
+                            if (ext.html) createNewTab(ext.html);
+                        };
+                    }
+                    navContainer.appendChild(btn);
+                }
+
+                if (ext.inajustes || permisos.includes('settings')) {
+                    const safeId = 'panel-ext-' + ext.id;
+                    
+                    const tabBtn = document.createElement('div');
+                    tabBtn.className = 'settings-tab-btn ext-injected';
+                    tabBtn.setAttribute('data-target', safeId);
+                    tabBtn.innerHTML = `<i class="ph ph-puzzle-piece"></i> ${ext.inajustes.name || ext.name}`;
+                    
+                    tabBtn.onclick = () => {
+                        document.querySelectorAll('.settings-tab-btn').forEach(b => b.classList.remove('active'));
+                        document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
+                        tabBtn.classList.add('active');
+                        document.getElementById(safeId).classList.add('active');
+                    };
+                    settingsTabs.appendChild(tabBtn);
+
+                    const panel = document.createElement('div');
+                    panel.className = 'settings-panel ext-injected';
+                    panel.id = safeId;
+                    
+                    let htmlContent = `<h3>${ext.inajustes.name || ext.name}</h3>`;
+                    
+                    if (ext.inajustes.boton) {
+                        htmlContent += `<button class="auth-btn-action ext-action-btn" data-script="${btoa(ext.inajustes.boton_js || '')}">${ext.inajustes.boton}</button>`;
+                    }
+                    if (ext.inajustes.toogle) {
+                        htmlContent += `
+                            <div class="setting-item">
+                                <span>${ext.inajustes.toogle}</span>
+                                <label class="switch"><input type="checkbox" class="ext-action-toggle" data-script="${btoa(ext.inajustes.toogle_js || '')}"><span class="slider"></span></label>
+                            </div>
+                        `;
+                    }
+
+                    panel.innerHTML = htmlContent;
+                    document.getElementById('settings-content-wrapper').appendChild(panel);
+                }
+            });
+
+            document.querySelectorAll('.ext-action-btn').forEach(btn => {
+                btn.onclick = () => {
+                    try { const code = atob(btn.getAttribute('data-script')); new Function(code)(); } catch(e) { console.error("Error en extensión:", e); }
+                };
+            });
+            document.querySelectorAll('.ext-action-toggle').forEach(tgl => {
+                tgl.onchange = (e) => {
+                    try { const code = atob(tgl.getAttribute('data-script')); new Function('state', code)(e.target.checked); } catch(err) { console.error("Error en extensión:", err); }
+                };
+            });
+            document.querySelectorAll('.close-ext-sidebar').forEach(btn => {
+                btn.onclick = () => document.getElementById(btn.getAttribute('data-target')).style.display = 'none';
+            });
+        };
+
+        // --- RADAR DE PANDA STORE (PANDA 1.0.15) CORREGIDO ---
+        setInterval(() => {
+            if (!activeTabId) return;
+            const activeView = document.getElementById('view-' + activeTabId);
+            if (!activeView) return;
+            const webview = activeView.querySelector('webview');
+            
+            // SOLUCIÓN: Añadimos webview.isLoading() para pausar el radar durante la carga
+            if (!webview || typeof webview.getURL !== 'function' || (typeof webview.isLoading === 'function' && webview.isLoading())) return;
+            
+            try {
+                const currentUrl = webview.getURL();
+                if (currentUrl && (currentUrl.includes("store.panda.erikhub.com") || currentUrl.includes("extension.panda.erikhub.com"))) {
+                    webview.executeJavaScript(`
+                        (function() {
+                            const meta = document.getElementById('panda-install-data');
+                            if (meta && meta.getAttribute('data-status') === 'pending') {
+                                meta.setAttribute('data-status', 'installed');
+                                return meta.getAttribute('data-extension');
+                            }
+                            return null;
+                        })();
+                    `).then((extJSON) => {
+                        if (extJSON) {
+                            const extension = JSON.parse(extJSON);
+                            window.installExtensionStore(extension);
+                            alert("¡Extensión '" + extension.name + "' instalada con éxito desde la tienda!");
+                        }
+                    }).catch(() => {});
+                }
+            } catch (e) {}
+        }, 1500); // Subimos el intervalo a 1.5s para optimizar el rendimiento
+
         applySettings();
         updateAccountUI();
         createNewTab();
+        renderInstalledExtensions();
+        applyInstalledExtensions();
+
     </script>
 </body>
 </html>
